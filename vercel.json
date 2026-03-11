@@ -1,0 +1,16 @@
+{
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "framework": "vite",
+    "cleanUrls": true,
+    "rewrites": [
+        {
+            "source": "/landing",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/chat",
+            "destination": "/chat.html"
+        }
+    ]
+}

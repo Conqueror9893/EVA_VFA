@@ -1,0 +1,2671 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Bey API - Chat</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous" />
+  <link rel="stylesheet" href="styles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif !important;
+    }
+
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .bg-change {
+      position: fixed;
+      inset: 0;
+      /* background: url(/dist/ui/text.png) no-repeat 20% 20%; */
+      /* background-size: 65%; */
+      z-index: 1;
+
+    }
+
+    .bg-change>.card-selection,
+    .bg-change>.details,
+    .bg-change>.selected-card {
+      scale: 0.61;
+      width: 170%;
+      transform-origin: top left;
+      background: transparent;
+    }
+
+    .bg-change>.details>.container {
+      background-color: transparent;
+    }
+
+    .bg-change>.card-selection,
+    .bg-change>.details,
+    .bg-change>.selected-card {
+      display: none !important;
+      /* background: url("/ui/bg.jpg") no-repeat center center; */
+    }
+
+    .bg-change.view-card-selection>.card-selection {
+      display: block !important;
+    }
+
+    .bg-change.view-card-selection .card-selection .cc-display {
+      display: flex !important;
+    }
+
+    .bg-change.view-details>.details {
+      display: block !important;
+    }
+
+    .bg-change.view-selected-card>.selected-card {
+      display: block !important;
+    }
+
+    .bg-change.bg-slide-up {
+      animation: bgSlideUp 420ms ease-out;
+    }
+
+    @keyframes bgSlideUp {
+      0% {
+        transform: scale(0.7) translateY(36px);
+        opacity: 0.65;
+      }
+
+      100% {
+        transform: scale(0.7) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .transcription-panel {
+      position: fixed;
+      right: 3%;
+      left: 35%;
+      bottom: 0;
+      z-index: 10;
+      max-height: 200px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      visibility: visible;
+      display: none;
+    }
+
+    .transcription-header {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      background: rgba(241, 245, 249, 0.8);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .transcription-text {
+      flex: 1;
+      min-height: 80px;
+      max-height: 160px;
+      padding: 12px 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #111827;
+      border: none;
+      resize: none;
+      font-family: inherit;
+      background: transparent;
+    }
+
+    .transcription-text:focus {
+      outline: none;
+    }
+
+    .transcription-text::placeholder {
+      color: #9ca3af;
+    }
+
+    .input-box {
+      gap: 0 !important;
+      position: fixed;
+      right: 3%;
+      left: 35%;
+      z-index: 10;
+      bottom: 80px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease, visibility 220ms ease;
+    }
+
+    .input-box.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .input-box .form-control {
+      border-radius: 51.2px;
+      border: 1.6px solid rgba(0, 0, 0, 0.08);
+      background: #FFF;
+      display: flex;
+      padding: 10px 80px 10px 24px;
+      align-items: center;
+      align-self: stretch;
+      font-size: 20px;
+      line-height: 32px;
+      height: 72px;
+      color: #111827;
+    }
+
+    .input-box .form-control:disabled,
+    .input-box .form-control[readonly],
+    .input-box .form-control::placeholder {
+      color: #333333;
+      opacity: 1;
+    }
+
+    .input-box .btn {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      z-index: 11;
+      background: url(/ui/btn.png) no-repeat 0 0 transparent;
+      width: 40px;
+      height: 40px;
+      color: transparent;
+      text-indent: -1000px;
+      border: none;
+      display: flex;
+      background-size: contain;
+      opacity: 1;
+    }
+
+    .input-box .btn.disabled,
+    .input-box .btn:disabled {
+      opacity: .30;
+      cursor: not-allowed;
+    }
+  </style>
+  <style>
+    /* Main Container */
+    .card-selection .cc-display {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Background Styling */
+    .card-selection .background-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .card-selection .bg-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: scaleY(-1);
+    }
+
+    .card-selection .bg-image-blur {
+      position: absolute;
+      top: -30%;
+      left: -10%;
+      width: 120%;
+      height: 150%;
+      background: linear-gradient(90deg, #203ca7 0%, #4e69d9 50%, #5697ff 100%);
+      filter: blur(128px);
+      opacity: 0.3;
+      mix-blend-mode: multiply;
+    }
+
+    .card-selection .gradient-circles {
+      position: absolute;
+      left: -40%;
+      top: -10%;
+      width: 120%;
+      height: 120%;
+      opacity: 0.4;
+    }
+
+    .card-selection .circles-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-selection .gradient-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60%;
+      background: linear-gradient(to top, #f0f4fd 24%, rgba(240, 244, 253, 0) 100%);
+    }
+
+    /* Content Container */
+    .card-selection .content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card-selection .content-wrapper {
+      width: 100%;
+      padding: 40px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+      gap: 40px;
+      justify-content: space-around;
+    }
+
+    /* Cards Section */
+    .card-selection .cards-section {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .card-selection .card-container {
+      /* background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 100%),
+        linear-gradient(-86.27deg, #6933f2 6.16%, #5697ff 90.62%);
+      border: 1px solid #6933f2; */
+      border-radius: 16px;
+      /* padding: 24px; */
+      width: 334px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card-selection .card-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(105, 51, 242, 0.2);
+    }
+
+    .card-selection .card-image-wrapper {
+      width: 262px;
+      height: 164px;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-selection .card-image-medium {
+      height: 164px;
+    }
+
+    .card-selection .card-gold {
+      border: 1px solid #bd9967;
+    }
+
+    .card-selection .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-selection .card-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 28px;
+      color: #333333a1;
+      text-align: center;
+      width: 90%;
+      margin-bottom: -15px;
+      padding-bottom: 0;
+    }
+
+    .card-selection .card-title+.card-title-glow {
+      display: block;
+      margin-top: 0;
+      line-height: 0;
+    }
+
+    /* Bottom Content */
+    .card-selection .bottom-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      width: 100%;
+      padding: 40px 0;
+    }
+
+    .card-selection .main-heading {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      font-size: 38px;
+      line-height: 48px;
+      text-align: center;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%),
+        linear-gradient(120.98deg, #334fc5 0.27%, #5697ff 64.58%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      width: 100%;
+    }
+
+    /* Benefits Section */
+    .card-selection .benefits-section {
+      display: flex;
+      gap: 24px;
+      justify-content: space-evenly;
+      flex-wrap: nowrap;
+      width: 82%;
+      margin: 0 auto;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .card-selection .benefit-card {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      justify-content: center;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-selection .benefit-card:hover {
+      background: rgba(255, 255, 255, 0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-selection .benefit-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-selection .benefit-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 28px;
+      line-height: 36px;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    /* Search Container */
+    .card-selection .search-container {
+      position: relative;
+      width: 100%;
+      max-width: 1288px;
+      height: 102px;
+      background: white;
+      border: 1.6px solid rgba(0, 0, 0, 0.08);
+      border-radius: 51.2px;
+      display: flex;
+      align-items: center;
+      padding: 12.8px;
+      gap: 25.6px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-selection .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 22.4px;
+      line-height: 32px;
+      color: #111827;
+      padding: 12.8px 25.6px;
+      background: transparent;
+    }
+
+    .card-selection .search-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .card-selection .search-button {
+      width: 51.2px;
+      height: 51.2px;
+      background: linear-gradient(90deg, #4e69d9 0%, #a057e8 100%);
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.3;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      padding: 6.4px;
+    }
+
+    .card-selection .search-button:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .card-selection .search-button svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    /* Tablet Responsiveness (iPad Pro, iPad Air, etc.) */
+    @media (max-width: 1024px) {
+      .card-selection .content-wrapper {
+        padding: 32px 40px;
+      }
+
+      .card-selection .main-heading {
+        font-size: 36px;
+        line-height: 44px;
+      }
+
+      .card-selection .card-container {
+        width: 300px;
+      }
+
+      .card-selection .benefit-text {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .card-selection .search-container {
+        max-width: 100%;
+      }
+    }
+
+    /* Tablet Portrait (iPad, smaller tablets) */
+    @media (max-width: 768px) {
+      .card-selection .content-wrapper {
+        padding: 24px 32px;
+        gap: 32px;
+      }
+
+      .card-selection .cards-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .card-selection .card-container {
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .card-selection .main-heading {
+        font-size: 32px;
+        line-height: 40px;
+      }
+
+      .card-selection .benefits-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .card-selection .benefit-card {
+        width: 100%;
+        max-width: 100%;
+        min-width: unset;
+      }
+
+      .card-selection .search-container {
+        height: 90px;
+        padding: 10px;
+      }
+
+      .card-selection .search-input {
+        font-size: 18px;
+        padding: 10px 20px;
+      }
+
+      .card-selection .search-button {
+        width: 45px;
+        height: 45px;
+      }
+
+      .card-selection .search-button svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 480px) {
+      .card-selection .content-wrapper {
+        padding: 20px 16px;
+        gap: 24px;
+      }
+
+      .card-selection .card-title {
+        font-size: 18px;
+        line-height: 24px;
+      }
+
+      .card-selection .main-heading {
+        font-size: 28px;
+        line-height: 36px;
+      }
+
+      .card-selection .benefit-text {
+        font-size: 20px;
+        line-height: 28px;
+      }
+
+      .card-selection .benefit-card {
+        height: auto;
+        min-height: 120px;
+      }
+
+      .card-selection .search-container {
+        height: 80px;
+        border-radius: 40px;
+      }
+
+      .card-selection .search-input {
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      .card-selection .search-button {
+        width: 40px;
+        height: 40px;
+      }
+
+      .card-selection .search-button svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    /* Landscape Tablet Optimization */
+    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+      .card-selection .cards-section {
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .card-selection .card-container {
+        width: calc(33.333% - 16px);
+        min-width: 280px;
+      }
+
+      .card-selection .benefits-section {
+        flex-direction: row;
+      }
+
+      .card-selection .benefit-card {
+        flex: 1;
+        max-width: calc(33.333% - 16px);
+      }
+    }
+
+    /* Large Tablets / Small Desktop */
+    @media (min-width: 1024px) and (max-width: 1280px) {
+      .card-selection .content-wrapper {
+        padding: 0px 48px 40px 48px;
+      }
+
+      .card-selection .card-container {
+        width: 310px;
+      }
+    }
+
+    /* Animation for loading */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card-selection .card-container,
+    .card-selection .benefit-card {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    .card-selection .card-container:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .card-selection .card-container:nth-child(2) {
+      animation-delay: 0.2s;
+      scale: 1.5;
+      margin-top: 4px;
+    }
+
+    .card-selection .card-container:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .card-selection .card-container:nth-child(1),
+    .card-selection .card-container:nth-child(3) {
+      scale: 1.3;
+    }
+
+    .card-selection .benefit-card:nth-child(1) {
+      animation-delay: 0.4s;
+    }
+
+    .card-selection .benefit-card:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+
+    .card-selection .benefit-card:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+  </style>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-gradient: linear-gradient(120.981deg, rgb(51, 79, 197) 0.26867%, rgb(86, 151, 255) 64.584%);
+      --card-bg: rgba(255, 255, 255, 0.3);
+      --border-default: rgba(255, 255, 255, 1);
+      --border-active: #00875f;
+      --text-primary: #111827;
+      --checkmark-bg: #00875f;
+      --checkmark-stroke: #EBF9EF;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: white;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .details {
+      display: none !important;
+    }
+
+    /* Background Decorations */
+    .details>.bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .details>.bg-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scaleY(-1);
+      width: 100%;
+      max-width: 1497px;
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .details>.gradient-blur {
+      position: absolute;
+      top: -20%;
+      left: 50%;
+      transform: translate(-50%, 0) rotate(90deg) scaleY(-1);
+      width: 200%;
+      height: 300%;
+      background: linear-gradient(90deg, #203ca7 0%, #203ca7 100%);
+      filter: blur(128px);
+      opacity: 0.5;
+      mix-blend-mode: multiply;
+    }
+
+    .details>.gradient-circles {
+      position: absolute;
+      top: -10%;
+      left: -20%;
+      width: 80%;
+      height: 120%;
+      opacity: 0.2;
+    }
+
+    .details>.gradient-circle {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+    }
+
+    .details>.circle-1 {
+      width: 600px;
+      height: 600px;
+      background: linear-gradient(180deg, #79B8FE 0%, #DDD9FF 100%);
+      top: 20%;
+      right: 10%;
+    }
+
+    .details>.circle-2 {
+      width: 600px;
+      height: 600px;
+      background: linear-gradient(180deg, #79B8FE 0%, #DDD9FF 100%);
+      top: 40%;
+      left: 5%;
+    }
+
+    .details>.circle-3 {
+      width: 600px;
+      height: 600px;
+      background: #34C6EF;
+      top: 10%;
+      left: 15%;
+    }
+
+    .details>.gradient-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 80%;
+      background: linear-gradient(to top, #f0f4fd 24.104%, rgba(240, 244, 253, 0) 100%);
+    }
+
+    /* Main Content */
+    .details>.container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px 64px;
+      border: none;
+    }
+
+    .details>.content-wrapper {
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Title */
+    .details .title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 48px;
+      text-align: center;
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-feature-settings: 'ss01';
+      margin-bottom: 50px;
+    }
+
+    /* Cards Grid */
+    .details .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      width: 100%;
+    }
+
+    .details .card {
+      position: relative;
+      background: rgb(255 255 255 / 52%);
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      padding: 24px 12px;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .details .card.active {
+      border-color: var(--border-active);
+    }
+
+    .details .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 135, 95, 0.15);
+    }
+
+    .details .bg-change {
+      background: url(/ui/start.jpg) no-repeat center center;
+    }
+
+    /* Icon Container */
+    .details .icon-container {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .details .icon-container svg {
+      width: 42px;
+      height: 42px;
+    }
+
+    .details .icon-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Card Text */
+    .details .card-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 42px;
+      color: var(--text-primary);
+      text-align: center;
+      font-feature-settings: 'ss01';
+      margin-bottom: 0;
+    }
+
+    .details .card-text-small {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--text-primary);
+      text-align: center;
+      font-feature-settings: 'ss01';
+    }
+
+    /* Checkmark Badge */
+    .details .checkmark-badge {
+      position: absolute;
+      top: -12px;
+      right: -11px;
+      width: 32px;
+      height: 32px;
+      background: var(--checkmark-bg);
+      border-radius: 80px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .details .card.active .checkmark-badge {
+      display: flex;
+    }
+
+    .details .checkmark-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Responsive Design for Tablets */
+    @media screen and (max-width: 1024px) {
+      .details .container {
+        padding: 32px 40px;
+      }
+
+      .details .title {
+        font-size: 36px;
+        line-height: 44px;
+      }
+
+      .details .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+
+    }
+
+    @media screen and (max-width: 768px) {
+      .details .container {
+        padding: 24px 24px;
+      }
+
+      .details .title {
+        font-size: 32px;
+        line-height: 40px;
+      }
+
+      .details .content-wrapper {
+        gap: 32px;
+      }
+
+      .details .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .details .card {
+        height: 120px;
+      }
+
+      .details .card-text {
+        font-size: 18px;
+        line-height: 24px;
+      }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+
+      /* iPad Portrait */
+      .details .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .details .card {
+        height: 160px;
+      }
+    }
+
+    @media screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+
+      /* iPad Landscape */
+      .details .container {
+        padding: 40px 48px;
+      }
+
+      .details .cards-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  </style>
+  <style>
+    /* Background Effects */
+    .selected-card .bg-wrapper {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 1497.143px;
+      height: 2096px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .selected-card .bg-image-wrapper {
+      position: absolute;
+      left: calc(50% - 93.88px);
+      top: -1288.62px;
+      width: 3491.619px;
+      height: 4655.492px;
+      transform: rotate(90deg) scaleY(-1);
+      mix-blend-mode: multiply;
+    }
+
+    .selected-card .bg-image {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, #203ca7, #5697ff);
+      filter: blur(128.605px);
+      opacity: 0.5;
+    }
+
+    .selected-card .gradient-circles {
+      position: absolute;
+      left: -668.74px;
+      top: -205.77px;
+      width: 2151.764px;
+      height: 2575.953px;
+      opacity: 0.2;
+    }
+
+    .selected-card .gradient-circles svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .selected-card .bg-gradient {
+      position: absolute;
+      bottom: 398.42px;
+      left: 0;
+      width: 1445.517px;
+      height: 1697.583px;
+      background: linear-gradient(to top, #f0f4fd 24.104%, rgba(240, 244, 253, 0) 100%);
+      transform: scaleY(-1);
+    }
+
+    /* Content */
+    .selected-card .content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 64px;
+    }
+
+    .selected-card .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Title */
+    .selected-card .title {
+      width: 100%;
+      text-align: center;
+    }
+
+    .selected-card .title h1 {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 48px;
+      background: linear-gradient(91deg, #23489a, #3c6ab3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 0;
+    }
+
+    /* Card Section */
+    .selected-card .card-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      border-radius: 16px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 100%),
+        linear-gradient(-86.5338deg, rgb(105, 51, 242) 6.1578%, rgb(86, 151, 255) 90.624%);
+      border: 1px solid #6933f2;
+      width: 50%;
+      margin-top: 10%;
+    }
+
+    .selected-card .card-image {
+      width: 500px;
+      border-radius: 10.077px;
+      overflow: hidden;
+      margin-top: -15%;
+      margin-bottom: 18px;
+    }
+
+    .selected-card .card-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 524/328;
+      object-fit: cover;
+    }
+
+    .selected-card .card-details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      color: #222;
+    }
+
+    .selected-card .card-name {
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 36px;
+      margin-bottom: 0;
+    }
+
+    .selected-card .card-pricing {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .selected-card .price {
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 52px;
+      margin-bottom: 0;
+    }
+
+    .selected-card .annual-fees {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 28px;
+      margin-bottom: 0;
+    }
+
+    /* Features */
+    .selected-card .features {
+      display: flex;
+      gap: 28px;
+      flex-direction: column;
+      width: 60%;
+      margin-top: 50px;
+    }
+
+    .selected-card .feature-card {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .selected-card .icon-wrapper {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .selected-card .icon-wrapper svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .selected-card .icon-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+    }
+
+    .selected-card .icon-content svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .selected-card .feature-text {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 30px;
+      color: #111827;
+      margin-bottom: 0px;
+    }
+
+    /* Responsive Styles for iPad/Tablet */
+    @media screen and (max-width: 1024px) {
+      .selected-card .content {
+        padding: 32px 48px;
+      }
+
+      .selected-card .title h1 {
+        font-size: 36px;
+        line-height: 44px;
+      }
+
+      .selected-card .card-section {
+        padding: 20px;
+      }
+
+      .selected-card .card-image {
+        width: 280px;
+      }
+
+      .selected-card .card-name {
+        font-size: 26px;
+        line-height: 34px;
+      }
+
+      .selected-card .price {
+        font-size: 22px;
+        line-height: 30px;
+      }
+
+      .selected-card .annual-fees {
+        font-size: 18px;
+        line-height: 26px;
+      }
+
+      .selected-card .features {
+        gap: 20px;
+      }
+
+      .selected-card .feature-card {
+        padding: 20px;
+        gap: 20px;
+      }
+
+      .selected-card .feature-text {
+        font-size: 18px;
+        line-height: 26px;
+      }
+    }
+
+    @media screen and (max-width: 820px) {
+      .selected-card .content {
+        padding: 24px 32px;
+      }
+
+      .selected-card .content-wrapper {
+        gap: 32px;
+      }
+
+      .selected-card .title h1 {
+        font-size: 32px;
+        line-height: 40px;
+      }
+
+      .selected-card .card-section {
+        padding: 18px;
+      }
+
+      .selected-card .card-image {
+        width: 260px;
+      }
+
+      .selected-card .card-name {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .selected-card .price {
+        font-size: 20px;
+        line-height: 28px;
+      }
+
+      .selected-card .annual-fees {
+        font-size: 16px;
+        line-height: 24px;
+      }
+
+      .selected-card .features {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .selected-card .feature-card {
+        padding: 18px;
+        gap: 18px;
+      }
+
+      .selected-card .feature-text {
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .selected-card .content {
+        padding: 20px 24px;
+      }
+
+      .selected-card .content-wrapper {
+        gap: 24px;
+      }
+
+      .selected-card .title h1 {
+        font-size: 28px;
+        line-height: 36px;
+      }
+
+      .selected-card .card-section {
+        padding: 16px;
+      }
+
+      .selected-card .card-image {
+        width: 240px;
+      }
+
+      .selected-card .card-name {
+        font-size: 22px;
+        line-height: 30px;
+      }
+
+      .selected-card .price {
+        font-size: 18px;
+        line-height: 26px;
+      }
+
+      .selected-card .annual-fees {
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      .selected-card .feature-card {
+        padding: 16px;
+        gap: 16px;
+      }
+
+      .selected-card .icon-wrapper {
+        width: 36px;
+        height: 36px;
+      }
+
+      .selected-card .icon-content {
+        width: 20px;
+        height: 20px;
+      }
+
+      .selected-card .feature-text {
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+
+    /* Landscape orientation optimization */
+    @media screen and (max-height: 600px) and (orientation: landscape) {
+      .selected-card .content {
+        padding: 16px 32px;
+      }
+
+      .selected-card .content-wrapper {
+        gap: 16px;
+      }
+
+      .selected-card .title h1 {
+        font-size: 24px;
+        line-height: 32px;
+      }
+
+      .selected-card .card-section {
+        padding: 12px;
+      }
+
+      .selected-card .card-image {
+        width: 180px;
+      }
+
+      .selected-card .card-name {
+        font-size: 18px;
+        line-height: 24px;
+      }
+
+      .selected-card .card-details {
+        gap: 8px;
+      }
+
+      .selected-card .price {
+        font-size: 16px;
+        line-height: 22px;
+      }
+
+      .selected-card .annual-fees {
+        font-size: 12px;
+        line-height: 18px;
+      }
+
+      .selected-card .features {
+        flex-direction: row;
+        gap: 12px;
+      }
+
+      .selected-card .feature-card {
+        padding: 12px;
+        gap: 12px;
+      }
+
+      .selected-card .icon-wrapper {
+        width: 32px;
+        height: 32px;
+      }
+
+      .selected-card .icon-content {
+        width: 18px;
+        height: 18px;
+      }
+
+      .selected-card .feature-text {
+        font-size: 12px;
+        line-height: 18px;
+      }
+    }
+  </style>
+  <style>
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      background: url("/ui/bg.jpg") no-repeat center center;
+      padding: 35px;
+      height: 100vh;
+      overflow: hidden;
+      background-size: cover;
+    }
+
+    .sidebar {
+      width: 100%;
+      transition: all 0.5s ease 0s;
+      position: relative;
+    }
+
+    .bg-change {
+      width: 0;
+      position: relative;
+      opacity: 0;
+      transition: all 0.5s ease 0s;
+    }
+
+    .main-container.active .sidebar {
+      width: 30%;
+      opacity: 1;
+      transition: all 0.5s ease 0s;
+    }
+
+    .main-container.active .bg-change {
+      width: 70%;
+      opacity: 1;
+      transition: all 0.5s ease 0s;
+    }
+
+    .main-container.active .sidebar #main-content {
+      width: 330px;
+      height: auto;
+      overflow: hidden;
+    }
+
+  </style>
+  <style>
+    .sidebar #main-content {
+      position: absolute;
+      z-index: 10;
+      width: 416px;
+      height: 416px;
+      top: 51px;
+      right: 0;
+      left: 0;
+      margin: 0 auto;
+    }
+
+    .sidebar #main-content .container {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    /* Chroma media-wrapper + FX (from chroma/index.html) */
+    #main-content .controls-section {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      margin: 0;
+      padding: 0;
+    }
+
+    #main-content .controls-section #actions-area {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #main-content .controls-section .btn-icon {
+      width: 56px;
+      height: 56px;
+      padding: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0;
+      min-width: 56px;
+    }
+
+    #main-content .controls-section .btn-icon svg {
+      flex-shrink: 0;
+    }
+
+    #main-content .controls-section .btn-primary.btn-icon {
+      background: linear-gradient(135deg, #0E2391 0%, #4F6FDF 100%);
+      border: none;
+      color: white;
+    }
+
+    #main-content .controls-section .btn-primary.btn-icon:hover:not(:disabled) {
+      background: linear-gradient(135deg, #1a2fa8 0%, #5c7ae8 100%);
+    }
+
+    #main-content .controls-section .btn-danger.btn-icon {
+      background: #dc3545;
+      border: none;
+      color: white;
+    }
+
+    #main-content .controls-section .btn-danger.btn-icon:hover:not(:disabled) {
+      background: #c82333;
+    }
+
+    #main-content .media-wrapper {
+      position: relative;
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background-color: transparent;
+      aspect-ratio: 1 / 1;
+    }
+
+    #main-content .media-wrapper .eva-stage {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #main-content .media-wrapper .fx-video-source {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    #main-content .media-wrapper .fx-under-eva {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 120%;
+      height: 120%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #main-content .media-wrapper .fx-layer {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 120%;
+      height: 120%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      display: none;
+    }
+
+    #main-content .media-wrapper .fx-underlay {
+      z-index: 1;
+      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 80%);
+      mask-image: linear-gradient(to bottom, black 60%, transparent 80%);
+    }
+
+    #main-content .media-wrapper .fx-overlay {
+      z-index: 3;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 40%, black 60%);
+      mask-image: linear-gradient(to bottom, transparent 40%, black 60%);
+    }
+
+    #main-content .media-wrapper .fx-overlay-effect {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.15) 100%);
+      mix-blend-mode: overlay;
+      display: none;
+    }
+
+    #main-content .media-wrapper .eva-static-layer,
+    #main-content .media-wrapper .eva-agent-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #main-content .media-wrapper .eva-static-layer {
+      z-index: 2;
+      -webkit-mask-image: radial-gradient(ellipse 54% 64% at 50% calc(50% - 28%), black 82%, transparent 100%);
+      mask-image: radial-gradient(ellipse 54% 64% at 50% calc(50% - 28%), black 82%, transparent 100%);
+    }
+
+    #main-content .media-wrapper .eva-agent-layer {
+      z-index: 3;
+      -webkit-mask-image: radial-gradient(ellipse 55% 65% at 50% calc(50% - 26% - 25px), black 80%, transparent 100%);
+      mask-image: radial-gradient(ellipse 55% 65% at 50% calc(50% - 26% - 25px), black 80%, transparent 100%);
+    }
+
+    #main-content .media-wrapper .eva-agent-layer:not(.live) {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #main-content .media-wrapper .eva-agent-layer.live {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #main-content .media-wrapper .eva-static-layer {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #main-content .media-wrapper .eva-static-layer.agent-active {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #main-content .media-wrapper .eva-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      object-fit: cover;
+    }
+
+    #main-content .media-wrapper .eva-static-canvas {
+      transform: scale(0.9) translateY(5%);
+    }
+
+    #main-content .media-wrapper .eva-live-canvas {
+      transform: scale(0.8) translateY(-0.6%);
+    }
+
+    #main-content .media-wrapper .zoom-canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: block;
+    }
+
+    #main-content .participants-area-eva {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    #video-user {
+      display: none;
+    }
+
+    .sidebar>.screen {
+      /* width: 360px; */
+      position: relative;
+      background: #f0f4fd;
+      border-radius: 40px;
+      box-shadow: 0 0 36px rgba(32, 60, 167, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* Background Layer */
+    .sidebar .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .sidebar .bg-image {
+      position: absolute;
+      width: 100%;
+      height: 600px;
+      background: url(/ui/mobile-bg.jpg) no-repeat center center;
+      background-size: cover;
+      z-index: 1;
+    }
+
+
+    /* Gradient Circle 1 */
+    .sidebar .circle1 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #79B8FE 0%, #DDD9FF 100%);
+      filter: blur(100px);
+      opacity: 0.4;
+      top: -100px;
+      right: -150px;
+    }
+
+    /* Gradient Circle 2 */
+    .sidebar .circle2 {
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #34C6EF 0%, #79B8FE 100%);
+      filter: blur(80px);
+      opacity: 0.3;
+      top: 100px;
+      left: -150px;
+    }
+
+    /* Gradient Circle 3 */
+    .sidebar .circle3 {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #DDD9FF 0%, white 100%);
+      filter: blur(60px);
+      opacity: 0.5;
+      bottom: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Content */
+    .sidebar .content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    /* Bottom Card */
+    .sidebar .bottom-card {
+      position: relative;
+      border-radius: 40px 40px 0 0;
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+      border-top: 2px solid transparent;
+      background-image: linear-gradient(white, white), linear-gradient(to right, #FFFFFF 0%, #A162F8 15%, #5369DA 50%, #A162F8 85%, #FFFFFF 100%);
+      background-origin: padding-box, border-box;
+      background-clip: padding-box, border-box;
+      border-top: 2px solid rgba(255, 255, 255, 0);
+    }
+
+    .sidebar .date-text {
+      background: linear-gradient(96.63deg, #0E2391 0%, #4F6FDF 58.12%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      text-align: center;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    /* Orb / Blob listening */
+    .sidebar .orb-container {
+      width: 140px;
+      height: 140px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar .orb-container .orb-gif {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .sidebar .orb-glow {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(161, 179, 228, 0.4) 0%, transparent 70%);
+      filter: blur(10px);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    .sidebar .orb-sphere {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow:
+        inset -10px -10px 30px rgba(123, 143, 201, 0.4),
+        inset 10px 10px 30px rgba(255, 255, 255, 0.5),
+        0 10px 40px rgba(161, 179, 228, 0.3),
+        0 0 80px rgba(198, 213, 255, 0.2);
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    .sidebar .orb-sphere img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      mix-blend-mode: screen;
+    }
+
+    .sidebar .orb-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(198, 213, 255, 0.8) 0%, rgba(161, 179, 228, 0.6) 50%, rgba(123, 143, 201, 0.8) 100%);
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+
+    .sidebar .orb-sphere::before {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 20%;
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+      filter: blur(8px);
+      z-index: 2;
+    }
+
+    .sidebar .orb-sphere::after {
+      content: '';
+      position: absolute;
+      bottom: 10%;
+      right: 15%;
+      width: 50%;
+      height: 50%;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(123, 143, 201, 0.4) 0%, transparent 50%);
+      filter: blur(12px);
+      z-index: 2;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+
+      50% {
+        transform: scale(1.1);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes glow {
+
+      0%,
+      100% {
+        box-shadow:
+          inset -10px -10px 30px rgba(123, 143, 201, 0.4),
+          inset 10px 10px 30px rgba(255, 255, 255, 0.5),
+          0 10px 40px rgba(161, 179, 228, 0.3),
+          0 0 80px rgba(198, 213, 255, 0.2);
+      }
+
+      50% {
+        box-shadow:
+          inset -10px -10px 40px rgba(123, 143, 201, 0.6),
+          inset 10px 10px 40px rgba(255, 255, 255, 0.7),
+          0 10px 50px rgba(161, 179, 228, 0.5),
+          0 0 100px rgba(198, 213, 255, 0.4);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-height: 800px) {
+      .sidebar .container {
+        height: 800px;
+      }
+    }
+  </style>
+  <style>
+    .cards-head {
+      padding-bottom: 70px;
+    }
+
+    .cards-head .header-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: 0px;
+      margin-bottom: 0;
+      position: relative;
+      flex-shrink: 0;
+      color: transparent;
+      width: 100%;
+    }
+
+    .cards-head .welcome-text {
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-weight: 600;
+      line-height: 30px;
+      position: relative;
+      flex-shrink: 0;
+      font-size: 20px;
+      width: 100%;
+      background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(122.869deg, rgb(51, 79, 197) 0.26867%, rgb(86, 151, 255) 64.584%);
+      font-feature-settings: 'ss01';
+      margin-bottom: 0;
+    }
+
+    .cards-head .eva-text {
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      font-weight: 700;
+      line-height: 1;
+      position: relative;
+      flex-shrink: 0;
+      font-size: 88px;
+      letter-spacing: -1.12px;
+      width: 100%;
+      margin-bottom: 0;
+      background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(105.479deg, rgb(51, 79, 197) 0.26867%, rgb(86, 151, 255) 64.584%);
+    }
+
+    .cards-head .subtitle-text {
+      font-weight: 600;
+      line-height: 1;
+      position: relative;
+      flex-shrink: 0;
+      color: #1659bd;
+      font-size: 30px;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Eva agent audio - at body level for reliable playback -->
+  <audio id="eva-chroma-audio" autoplay playsinline
+    style="position: fixed; opacity: 0; pointer-events: none; width: 1px; height: 1px; left: 0; top: 0;"></audio>
+  <div class="main-container">
+    <div class="sidebar">
+      <div id="main-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="participants-area">
+                <div class="participants-area-eva">
+                  <div class="media-wrapper">
+                    <div class="eva-stage">
+                      <video id="fx-video-source" class="fx-video-source" src="/ui/fx.mp4" autoplay loop muted
+                        playsinline></video>
+                      <canvas id="fx-canvas" class="fx-under-eva"></canvas>
+                      <video class="fx-layer fx-underlay" src="/ui/fx.mp4" autoplay loop muted playsinline></video>
+                      <div class="eva-static-layer">
+                        <canvas id="eva-static-canvas" class="eva-canvas eva-static-canvas" width="1280"
+                          height="720"></canvas>
+                      </div>
+                      <div class="eva-agent-layer">
+                        <canvas id="eva-canvas" class="eva-canvas eva-live-canvas zoom-canvas" width="1280"
+                          height="720"></canvas>
+                      </div>
+                      <video class="fx-layer fx-overlay" src="/ui/fx.mp4" autoplay loop muted playsinline></video>
+                      <div class="fx-overlay-effect"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hidden: Eva static image (green removed) + chroma pipeline -->
+              <img id="eva-static-source" src="/ui/eva_static.jpg" alt="" style="display: none;">
+              <video id="eva-chroma-source" autoplay muted playsinline
+                style="position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px;"></video>
+              <canvas id="eva-chroma-canvas" style="display: none;"></canvas>
+              <div class="controls-section">
+                <div id="actions-area">
+                  <button id="start-call-button" class="btn btn-primary btn-icon" type="button"
+                    onclick="appActions.startCall()" aria-label="Start Call" title="Start Call">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </button>
+                  <div class="call-controls">
+                    <button id="disconnect-button" class="btn btn-danger btn-icon" disabled type="button"
+                      onclick="appActions.disconnect()" aria-label="End Call" title="End Call">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                          d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        <line x1="2" y1="2" x2="22" y2="22" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="screen">
+        <!-- Background Gradients -->
+        <div class="background">
+          <div class="bg-image">
+          </div>
+          <div class="circle1"></div>
+          <div class="circle2"></div>
+          <div class="circle3"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+          <!-- Bottom Card -->
+          <div class="bottom-card">
+            <div class="date-text" id="transcription-display"></div>
+            <div class="orb-container">
+              <img id="orb-blob" src="/ui/blob-static.gif" alt="Blob" class="orb-gif">
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        function initAfterAuth() {
+          const params = new URLSearchParams(window.location.search);
+          const nameFromUrl = (params.get('name') || '').trim();
+          if (nameFromUrl) {
+            localStorage.setItem('matchedUserName', nameFromUrl);
+            localStorage.setItem('matchedWebhookVariables', JSON.stringify({
+              name: nameFromUrl,
+              user_name: nameFromUrl,
+              userName: nameFromUrl,
+            }));
+          }
+          const startButton = document.getElementById('start-call-button');
+          if (startButton) setTimeout(() => startButton.click(), 300);
+        }
+        window.addEventListener('load', initAfterAuth);
+      </script>
+    </div>
+    <div class="bg-change">
+      <div class="card-selection">
+        <div class="cc-display">
+          <!-- Main Content -->
+          <div class="content">
+            <div class="content-wrapper">
+              <!-- Cards Section -->
+              <div class="cards-head">
+                <div class="header-section">
+                  <p class="welcome-text">
+                    Welcome to HDFC Bank!
+                  </p>
+                  <p class="eva-text">
+                    I'm EVA
+                  </p>
+                </div>
+                <p class="subtitle-text">Your all new AI Assistant</p>
+              </div>
+              <div class="cards-section">
+                <!-- Card 1 -->
+                <div class="card-container">
+                  <div class="card-image-wrapper">
+                    <img src="/ui/card1.png" alt="Regalia ForexPlus Card" class="card-img">
+                  </div>
+                  <!-- <p class="card-title">Regalia ForexPlus Card</p> -->
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card-container">
+                  <div class="card-image-wrapper card-image-medium">
+                    <img src="/ui/card2.png" alt="Multicurrency Platinum ForexPlus Chip Card" class="card-img">
+                  </div>
+                  <p class="card-title">Multicurrency Platinum ForexPlus Chip Card</p>
+                  <svg class="card-title-glow" xmlns="http://www.w3.org/2000/svg" width="258" height="54"
+                    viewBox="0 0 258 54" fill="none">
+                    <g opacity="0.1" filter="url(#filter0_f_601_2339)">
+                      <ellipse cx="129" cy="27" rx="112.5" ry="10.5" fill="black" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_f_601_2339" x="0" y="0" width="258" height="54" filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                        <feGaussianBlur stdDeviation="8.25" result="effect1_foregroundBlur_601_2339" />
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card-container">
+                  <div class="card-image-wrapper card-image-medium card-gold">
+                    <img src="/ui/card3.png" alt="ISIC Student ForexPlus Card" class="card-img">
+                  </div>
+                  <!-- <p class="card-title">ISIC Student ForexPlus Card</p> -->
+                </div>
+              </div>
+
+              <!-- Bottom Content Section -->
+              <div class="bottom-content">
+                <h1 class="main-heading">We offer Forex Cards with</h1>
+
+                <!-- Benefits Section -->
+                <div class="benefits-section">
+                  <!-- Benefit 1 -->
+                  <div class="benefit-card">
+                    <div class="benefit-icon">
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_186_18863)">
+                          <path
+                            d="M1.66622 13.3333C1.66622 6.88332 6.88289 1.66666 13.3329 1.66666L11.6505 4.80196M38.3473 26.6667C38.3473 33.1167 33.1307 38.3333 26.6807 38.3333L28.3631 35.198M23.6169 15.2935C23.6169 16.7192 24.7111 17.8686 26.0705 17.8686H28.8445C30.0271 17.8686 30.9886 16.8629 30.9886 15.6251C30.9886 14.2768 30.4028 13.8015 29.5297 13.4921L25.0758 11.9448C24.2027 11.6353 23.6169 11.1601 23.6169 9.81177C23.6169 8.57395 24.5784 7.56822 25.761 7.56822H28.535C29.8944 7.56822 30.9886 8.71762 30.9886 10.1433M27.2952 6.08747V19.3498M16.2929 11.6657C16.8231 6.05573 21.5467 1.66666 27.2953 1.66666C33.3992 1.66666 38.3473 6.61479 38.3473 12.7186C38.3473 18.4403 33.9993 23.1465 28.4271 23.7133M16.7046 22.4937H8.70418H10.024C11.9832 22.4937 13.5615 24.072 13.5615 26.0313C13.5615 27.9905 11.9832 29.5688 10.024 29.5688H8.70418L13.5615 33.1064M8.70398 26.0314H16.7043M23.7565 27.2815C23.7565 33.3896 18.8127 38.3334 12.7046 38.3334C6.59642 38.3334 1.65259 33.3896 1.65259 27.2815C1.65259 21.1733 6.59642 16.2294 12.7046 16.2294C12.9912 16.2294 13.2598 16.2474 13.5643 16.2653C18.9918 16.6773 23.3266 21.0121 23.7386 26.4395C23.7386 26.7082 23.7565 26.977 23.7565 27.2815Z"
+                            stroke="#111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_186_18863">
+                            <rect width="40" height="40" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                    <p class="benefit-text">22 Currencies</p>
+                  </div>
+
+                  <!-- Benefit 2 -->
+                  <div class="benefit-card">
+                    <div class="benefit-icon">
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_186_18855)">
+                          <path
+                            d="M3.33325 20.3753L13.9181 10.9621C14.5386 10.4103 15.4707 10.3994 16.1039 10.9366L21.3357 15.3752C21.9686 15.9121 22.9001 15.9016 23.5206 15.3505L36.5216 3.80453M29.9902 3.33334H36.6667V10.0099M5.23801 26.6667H8.09516C9.14713 26.6667 9.99992 27.5621 9.99992 28.6667V34.6667C9.99992 35.7712 9.14713 36.6667 8.09516 36.6667H5.23801C4.18604 36.6667 3.33325 35.7712 3.33325 34.6667V28.6667C3.33325 27.5621 4.18604 26.6667 5.23801 26.6667ZM31.9047 16.6667H34.7618C35.8138 16.6667 36.6666 17.5621 36.6666 18.6667V34.6666C36.6666 35.7712 35.8138 36.6666 34.7618 36.6666H31.9047C30.8527 36.6666 29.9999 35.7712 29.9999 34.6666V18.6667C29.9999 17.5621 30.8527 16.6667 31.9047 16.6667ZM18.5713 21.6667H21.4285C22.4805 21.6667 23.3332 22.5621 23.3332 23.6667V34.6667C23.3332 35.7712 22.4805 36.6667 21.4285 36.6667H18.5713C17.5194 36.6667 16.6666 35.7712 16.6666 34.6667V23.6667C16.6666 22.5621 17.5194 21.6667 18.5713 21.6667Z"
+                            stroke="#111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_186_18855">
+                            <rect width="40" height="40" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                    <p class="benefit-text">Spend Monitor</p>
+                  </div>
+
+                  <!-- Benefit 3 -->
+                  <div class="benefit-card">
+                    <div class="benefit-icon">
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_186_18851)">
+                          <path
+                            d="M35 21.5V30.5C35 33.8167 32.3167 36.5 29 36.5H23.5333M5 24.75V17.5C5 9.21667 11.7167 2.5 20 2.5C28.2833 2.5 35 9.21667 35 17.5V24.75M21.5 34.5H18.5C17.6716 34.5 17 35.1716 17 36C17 36.8284 17.6716 37.5 18.5 37.5H21.5C22.3284 37.5 23 36.8284 23 36C23 35.1716 22.3284 34.5 21.5 34.5ZM31.45 17.5H31.4667C33.4181 17.5 35 19.0819 35 21.0333V25.9667C35 27.9181 33.4181 29.5 31.4667 29.5H31.45C29.4986 29.5 27.9167 27.9181 27.9167 25.9667V21.0333C27.9167 19.0819 29.4986 17.5 31.45 17.5ZM8.53333 17.5H8.55C10.5014 17.5 12.0833 19.0819 12.0833 21.0333V25.9667C12.0833 27.9181 10.5014 29.5 8.55 29.5H8.53333C6.58193 29.5 5 27.9181 5 25.9667V21.0333C5 19.0819 6.58193 17.5 8.53333 17.5Z"
+                            stroke="#111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_186_18851">
+                            <rect width="40" height="40" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                    <p class="benefit-text">24x7 Customer Support</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="container">
+          <div class="content-wrapper">
+            <!-- Title -->
+            <h1 class="title">Got all your details!</h1>
+
+            <!-- Cards Grid -->
+            <div class="cards-grid">
+              <!-- Card 1: Purpose of Travel -->
+              <div class="card">
+                <div class="icon-container">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path
+                      d="M29.8833 34.5833C29.8833 28.1333 23.4667 22.9167 15.5667 22.9167C7.66666 22.9167 1.25 28.1333 1.25 34.5833M14.6021 22.9801L12.946 31.6354L15.6761 34.5833L18.3999 31.6354L16.9067 22.9801M23.8997 9.58333C23.8997 14.1857 20.1688 17.9167 15.5664 17.9167C10.964 17.9167 7.23307 14.1857 7.23307 9.58333C7.23307 4.98096 10.964 1.25 15.5664 1.25C20.1688 1.25 23.8997 4.98096 23.8997 9.58333Z"
+                      stroke="#111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <p class="card-text">Purpose of Travel</p>
+                <div class="checkmark-badge">
+                  <svg class="checkmark-svg" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="16" fill="#00875f" />
+                    <path d="M10.3333 15.9999L14.1067 19.7732L21.6667 12.2266" stroke="#EBF9EF" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Card 2: Country(ies) of Visit -->
+              <div class="card">
+                <div class="icon-container">
+                  <svg class="icon-svg" viewBox="0 0 32 32" fill="none">
+                    <path
+                      d="M29.3353 15.9999C29.3353 23.3648 23.3648 29.3353 15.9999 29.3353C8.63504 29.3353 2.66461 23.3648 2.66461 15.9999M29.3353 15.9999C29.3353 8.63504 23.3648 2.66461 15.9999 2.66461C8.63504 2.66461 2.66461 8.63504 2.66461 15.9999M29.3353 15.9999H2.66461M22.0011 15.9999C21.8573 33.7804 10.13 33.7804 9.98622 15.9999C10.13 -1.7805 21.8573 -1.7805 22.0011 15.9999Z"
+                      stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <p class="card-text">Country(ies) of Visit</p>
+                <div class="checkmark-badge">
+                  <svg class="checkmark-svg" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="16" fill="#00875f" />
+                    <path d="M10.3333 15.9999L14.1067 19.7732L21.6667 12.2266" stroke="#EBF9EF" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Card 3: Date of Departure -->
+              <div class="card">
+                <div class="icon-container">
+                  <svg class="icon-svg" viewBox="0 0 32 32" fill="none">
+                    <path
+                      d="M10.6667 2.66667V6.66667M21.3333 2.66667V6.66667M4.66667 12.12H27.3333M15.994 18.2667H16.006M11.0591 18.2667H11.0711M11.0591 22.2667H11.0711M28 11.3333V22.6667C28 26.6667 26 29.3333 21.3333 29.3333H10.6667C6 29.3333 4 26.6667 4 22.6667V11.3333C4 7.33333 6 4.66667 10.6667 4.66667H21.3333C26 4.66667 28 7.33333 28 11.3333Z"
+                      stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <p class="card-text">Date of Departure</p>
+                <div class="checkmark-badge">
+                  <svg class="checkmark-svg" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="16" fill="#00875f" />
+                    <path d="M10.3333 15.9999L14.1067 19.7732L21.6667 12.2266" stroke="#EBF9EF" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Card 4: Currency(ies) to Transact -->
+              <div class="card">
+                <div class="icon-container">
+                  <svg class="icon-svg" viewBox="0 0 32 32" fill="none">
+                    <path
+                      d="M1.33301 10.6667C1.33301 5.50667 5.50634 1.33333 10.6663 1.33333L9.3204 3.84158M30.6779 21.3333C30.6779 26.4933 26.5046 30.6667 21.3446 30.6667L22.6905 28.1584M18.8936 12.2348C18.8936 13.3754 19.7689 14.2949 20.8564 14.2949H23.0756C24.0217 14.2949 24.7909 13.4903 24.7909 12.5001C24.7909 11.4214 24.3223 11.0412 23.6238 10.7937L20.0607 9.55584C19.3622 9.30828 18.8936 8.92809 18.8936 7.84942C18.8936 6.85917 19.6628 6.05458 20.6088 6.05458H22.8281C23.9156 6.05458 24.7909 6.97411 24.7909 8.11467M21.8362 4.86999V15.4799M13.0343 9.33253C13.4585 4.84459 17.2374 1.33333 21.8363 1.33333C26.7194 1.33333 30.6779 5.29184 30.6779 10.1749C30.6779 14.7523 27.1995 18.5172 22.7417 18.9707M13.3637 17.995H6.96338H8.01921C9.58663 17.995 10.8493 19.2576 10.8493 20.825C10.8493 22.3924 9.58663 23.6551 8.01921 23.6551H6.96338L10.8493 26.4851M6.96322 20.8251H13.3635M19.0052 21.8252C19.0052 26.7117 15.0502 30.6667 10.1637 30.6667C5.27717 30.6667 1.3221 26.7117 1.3221 21.8252C1.3221 16.9387 5.27717 12.9836 10.1637 12.9836C10.393 12.9836 10.6079 12.9979 10.8515 13.0123C15.1935 13.3418 18.6613 16.8097 18.9909 21.1516C18.9909 21.3666 19.0052 21.5816 19.0052 21.8252Z"
+                      stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <p class="card-text">Currency(ies) to Transact</p>
+                <div class="checkmark-badge">
+                  <svg class="checkmark-svg" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="16" fill="#00875f" />
+                    <path d="M10.3333 15.9999L14.1067 19.7732L21.6667 12.2266" stroke="#EBF9EF" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="selected-card cards">
+        <div class="content">
+          <div class="content-wrapper">
+            <!-- Title -->
+            <!-- <div class="title">
+              <h1>Here's the best suited card for you!</h1>
+            </div> -->
+
+            <!-- Card Section -->
+            <div class="card-section">
+              <div class="card-image">
+                <img src="/ui/card1.png" alt="Regalia ForexPlus Card">
+              </div>
+              <div class="card-details">
+                <p class="card-name">Regalia ForexPlus Card</p>
+                <div class="card-pricing">
+                  <p class="price">₹1,000 + ₹180 GST</p>
+                  <p class="annual-fees">No Annual Fees</p>
+                </div>
+              </div>
+              <!-- Features -->
+              <div class="features">
+                <div class="feature-card">
+                  <div class="icon-wrapper icon-currency">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <circle cx="20" cy="20" r="20" fill="#FEF3D6" />
+                    </svg>
+                    <div class="icon-content">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="16.14" cy="7.36" r="7.36" fill="url(#currency-gradient1)" />
+                        <circle cx="7.37" cy="16.12" r="7.36" fill="url(#currency-gradient2)" />
+                        <path
+                          d="M0.75 8.5C0.34 8.5 0 8.16 0 7.75C0 3.48 3.48 0 7.75 0C8.01 0 8.26 0.14 8.39 0.36C8.53 0.59 8.53 0.87 8.41 1.1L7.4 2.98C7.2 3.35 6.75 3.48 6.38 3.29C6.01 3.09 5.88 2.64 6.07 2.27L6.41 1.64C3.61 2.25 1.5 4.76 1.5 7.75C1.5 8.16 1.16 8.5 0.75 8.5Z"
+                          fill="#FEC93B" />
+                        <defs>
+                          <linearGradient id="currency-gradient1" x1="13.524" y1="3.08" x2="18.162" y2="12.777"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#D39914" />
+                            <stop offset="1" stop-color="#926310" />
+                          </linearGradient>
+                          <linearGradient id="currency-gradient2" x1="3.77" y1="11.94" x2="10.43" y2="21.12"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FEC93B" />
+                            <stop offset="1" stop-color="#D39913" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <p class="feature-text">Zero Cross Currency conversion mark-up charges</p>
+                </div>
+
+                <div class="feature-card">
+                  <div class="icon-wrapper icon-dollar">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <circle cx="20" cy="20" r="20" fill="#C7F9D6" />
+                    </svg>
+                    <div class="icon-content">
+                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <circle cx="11" cy="11" r="10.75" fill="url(#dollar-gradient)" stroke="url(#dollar-gradient)"
+                          stroke-width="0.5" />
+                        <path
+                          d="M10.75 4C11.1642 4 11.5 4.33579 11.5 4.75V5.33984H11.8721C13.5501 5.33995 14.8418 6.75057 14.8418 8.41992C14.8418 8.8341 14.506 9.16992 14.0918 9.16992C13.6776 9.16988 13.3418 8.83407 13.3418 8.41992C13.3418 7.50942 12.6538 6.83996 11.8721 6.83984H11.5V10.2139L13.0225 10.7432C13.4716 10.9023 13.9586 11.1407 14.3184 11.5996C14.6851 12.0674 14.8418 12.6626 14.8418 13.3799C14.8418 14.8816 13.6679 16.1599 12.1523 16.1602H11.5V16.75C11.5 17.1642 11.1642 17.5 10.75 17.5C10.3358 17.5 10 17.1642 10 16.75V16.1602H9.6416C7.96364 16.16 6.672 14.7493 6.67188 13.0801C6.67188 12.6659 7.00766 12.3301 7.42188 12.3301C7.83609 12.3301 8.17188 12.6659 8.17188 13.0801C8.17199 13.9904 8.85996 14.66 9.6416 14.6602H10V11.2803L8.49121 10.7568C8.04215 10.5977 7.55503 10.3592 7.19531 9.90039C6.82865 9.43265 6.67191 8.83732 6.67188 8.12012C6.67188 6.61823 7.84649 5.33984 9.3623 5.33984H10V4.75C10 4.33579 10.3358 4 10.75 4Z"
+                          fill="#91F3B9" />
+                        <defs>
+                          <linearGradient id="dollar-gradient" x1="6.36" y1="3.43" x2="16.08" y2="18.69"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#2EB881" />
+                            <stop offset="1" stop-color="#087F60" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <p class="feature-text">Load in US Dollars and spend worldwide*</p>
+                </div>
+
+                <div class="feature-card">
+                  <div class="icon-wrapper icon-lounge">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <circle cx="20" cy="20" r="20" fill="#FBDCF6" />
+                    </svg>
+                    <div class="icon-content">
+                      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <rect x="2.28" width="17.06" height="11.72" rx="2" fill="url(#lounge-gradient1)" />
+                        <rect x="3.82" y="11.72" width="14.79" height="9.53" fill="#CDBBFD" />
+                        <path
+                          d="M5.3 21.25H1.7C1.32 21.25 1.01 20.96 0.98 20.59L0.01 10.49C-0.07 9.65 0.21 8.81 0.78 8.18C1.35 7.55 2.17 7.19 3.01 7.19C4.68 7.19 6.03 8.54 6.03 10.2V20.52C6.03 20.92 5.7 21.24 5.3 21.24V21.25Z"
+                          fill="url(#lounge-gradient2)" />
+                        <path
+                          d="M19.93 21.25H16.33C15.93 21.25 15.6 20.92 15.6 20.52V10.21C15.6 8.55 16.95 7.2 18.61 7.2C19.46 7.2 20.27 7.56 20.84 8.18C21.41 8.81 21.69 9.65 21.61 10.5L20.65 20.59C20.61 20.97 20.3 21.25 19.93 21.25Z"
+                          fill="url(#lounge-gradient3)" />
+                        <defs>
+                          <linearGradient id="lounge-gradient1" x1="14.5" y1="17.17" x2="8.2" y2="2.59"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#402BAF" />
+                            <stop offset="1" stop-color="#7455F3" />
+                          </linearGradient>
+                          <linearGradient id="lounge-gradient2" x1="1.62" y1="10.14" x2="5" y2="19.48"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#B098FB" />
+                            <stop offset="1" stop-color="#7454F2" />
+                          </linearGradient>
+                          <linearGradient id="lounge-gradient3" x1="16.67" y1="10.37" x2="18.94" y2="19.29"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#B098FB" />
+                            <stop offset="1" stop-color="#7454F2" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <p class="feature-text">Complimentary Lounge access to international airports in India</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Transcription display - shows live speech-to-text from user and agent -->
+    <div id="transcription-panel" class="transcription-panel">
+      <div class="transcription-header">Live transcript</div>
+      <textarea id="chat" class="transcription-text" readonly
+        placeholder="Transcription will appear here..."></textarea>
+    </div>
+    <div id="chat-input-area" class="input-box">
+      <input type="text" class="form-control" id="entry" placeholder="Type a message..."
+        onkeydown="if (event.key === 'Enter') { event.preventDefault(); appActions.sendMessage(); }" disabled />
+      <button id="send-button" class="btn btn-primary" type="button" onclick="appActions.sendMessage()" disabled>
+        Send
+      </button>
+    </div>
+    <script>
+      (function () {
+        const SIMILARITY_THRESHOLD = 85;
+        const SOFTNESS = 22;
+        const GREEN_DOMINANCE = 35;
+        const FALLBACK_GREEN = { r: 0, g: 255, b: 0 };
+
+        function detectGreenReference(ctx, width, height) {
+          const imageData = ctx.getImageData(0, 0, width, height);
+          const data = imageData.data;
+          let sumR = 0, sumG = 0, sumB = 0, count = 0;
+          const borderTop = Math.floor(height * 0.08);
+          const borderBottom = Math.floor(height * 0.92);
+          const borderLeft = Math.floor(width * 0.08);
+          const borderRight = Math.floor(width * 0.92);
+          for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+              if ((y < borderTop || y > borderBottom || x < borderLeft || x > borderRight)) {
+                const i = (y * width + x) * 4;
+                const r = data[i], g = data[i + 1], b = data[i + 2];
+                if (g > r && g > b && (g - r) > 30 && (g - b) > 30) {
+                  sumR += r; sumG += g; sumB += b; count++;
+                }
+              }
+            }
+          }
+          if (count < 80) return null;
+          return { r: sumR / count, g: sumG / count, b: sumB / count };
+        }
+
+        function applyAdaptiveChroma(ctx, width, height, ref) {
+          const imageData = ctx.getImageData(0, 0, width, height);
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            const isGreenBg = g > r && g > b && (g - Math.min(r, b)) >= GREEN_DOMINANCE;
+            if (!isGreenBg) {
+              data[i + 3] = 255;
+              continue;
+            }
+            const d = Math.sqrt(Math.pow(r - ref.r, 2) + Math.pow(g - ref.g, 2) + Math.pow(b - ref.b, 2));
+            const edgeStart = SIMILARITY_THRESHOLD - SOFTNESS;
+            const edgeEnd = SIMILARITY_THRESHOLD;
+            let alpha = 1.0;
+            if (d < edgeStart) alpha = 0;
+            else if (d < edgeEnd) alpha = (d - edgeStart) / SOFTNESS;
+            if (alpha < 0.5) {
+              data[i + 1] = Math.min(g, Math.floor((r + b) / 2));
+            }
+            data[i + 3] = Math.round(alpha * 255);
+          }
+          ctx.putImageData(imageData, 0, 0);
+        }
+
+        let evaChromaRunning = false;
+        let evaChromaRef = null;
+
+        function processEvaChroma() {
+          const source = document.getElementById('eva-chroma-source');
+          const workCanvas = document.getElementById('eva-chroma-canvas');
+          const outputCanvas = document.getElementById('eva-canvas');
+          if (!source || !workCanvas || !outputCanvas || source.paused || source.ended) {
+            if (evaChromaRunning) requestAnimationFrame(processEvaChroma);
+            return;
+          }
+          const wCtx = workCanvas.getContext('2d', { willReadFrequently: true });
+          const oCtx = outputCanvas.getContext('2d', { willReadFrequently: true });
+          if (!wCtx || !oCtx) return;
+
+          if (workCanvas.width !== source.videoWidth || workCanvas.height !== source.videoHeight) {
+            if (source.videoWidth > 0 && source.videoHeight > 0) {
+              workCanvas.width = source.videoWidth;
+              workCanvas.height = source.videoHeight;
+              outputCanvas.width = source.videoWidth;
+              outputCanvas.height = source.videoHeight;
+              evaChromaRef = null;
+            }
+          }
+
+          if (workCanvas.width > 0 && workCanvas.height > 0) {
+            wCtx.drawImage(source, 0, 0);
+            if (!evaChromaRef) evaChromaRef = detectGreenReference(wCtx, workCanvas.width, workCanvas.height) || FALLBACK_GREEN;
+            const ref = evaChromaRef;
+            applyAdaptiveChroma(wCtx, workCanvas.width, workCanvas.height, ref);
+            const scale = 0.83;
+            const dw = workCanvas.width * scale, dh = workCanvas.height * scale;
+            const ox = (workCanvas.width - dw) / 2, oy = (workCanvas.height - dh) / 2;
+            oCtx.clearRect(0, 0, outputCanvas.width, outputCanvas.height);
+            oCtx.drawImage(workCanvas, 0, 0, workCanvas.width, workCanvas.height, ox, oy, dw, dh);
+          }
+          if (evaChromaRunning) requestAnimationFrame(processEvaChroma);
+        }
+
+        function processEvaStatic() {
+          const img = document.getElementById('eva-static-source');
+          const outputCanvas = document.getElementById('eva-static-canvas');
+          if (!img || !outputCanvas || !img.complete || img.naturalWidth === 0) return;
+          const w = img.naturalWidth, h = img.naturalHeight;
+          const workCanvas = document.createElement('canvas');
+          workCanvas.width = w;
+          workCanvas.height = h;
+          const wCtx = workCanvas.getContext('2d', { willReadFrequently: true });
+          const oCtx = outputCanvas.getContext('2d', { willReadFrequently: true });
+          if (!wCtx || !oCtx) return;
+          outputCanvas.width = w;
+          outputCanvas.height = h;
+          wCtx.drawImage(img, 0, 0);
+          const ref = detectGreenReference(wCtx, w, h) || FALLBACK_GREEN;
+          applyAdaptiveChroma(wCtx, w, h, ref);
+          const scale = 0.83;
+          const dw = w * scale, dh = h * scale;
+          const ox = (w - dw) / 2, oy = (h - dh) / 2;
+          oCtx.clearRect(0, 0, w, h);
+          oCtx.drawImage(workCanvas, 0, 0, w, h, ox, oy, dw, dh);
+        }
+
+        window.startEvaChromaProcess = function () {
+          evaChromaRunning = true;
+          evaChromaRef = null;
+          document.querySelector('.eva-agent-layer')?.classList.add('live');
+          document.querySelector('.eva-static-layer')?.classList.add('agent-active');
+          processEvaChroma();
+        };
+
+        window.stopEvaChromaProcess = function () {
+          evaChromaRunning = false;
+          document.querySelector('.eva-agent-layer')?.classList.remove('live');
+          document.querySelector('.eva-static-layer')?.classList.remove('agent-active');
+          processEvaStatic();
+        };
+
+        const staticImg = document.getElementById('eva-static-source');
+        if (staticImg) {
+          if (staticImg.complete) processEvaStatic();
+          else staticImg.onload = processEvaStatic;
+        }
+      })();
+
+      (function () {
+        const WHITE_THRESHOLD = 245;
+        const SOFTNESS = 15;
+
+        function applyWhiteKey(ctx, width, height) {
+          const imageData = ctx.getImageData(0, 0, width, height);
+          const data = imageData.data;
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i], g = data[i + 1], b = data[i + 2];
+            const brightness = (r + g + b) / 3;
+            if (brightness >= WHITE_THRESHOLD) {
+              const t = Math.min(1, (brightness - WHITE_THRESHOLD + SOFTNESS) / SOFTNESS);
+              data[i + 3] = Math.round((1 - t) * 255);
+            }
+          }
+          ctx.putImageData(imageData, 0, 0);
+        }
+
+        function processFxWhiteKey() {
+          const source = document.getElementById('fx-video-source');
+          const canvas = document.getElementById('fx-canvas');
+          if (!source || !canvas || source.paused || source.ended) {
+            requestAnimationFrame(processFxWhiteKey);
+            return;
+          }
+          if (canvas.width !== source.videoWidth || canvas.height !== source.videoHeight) {
+            if (source.videoWidth > 0 && source.videoHeight > 0) {
+              canvas.width = source.videoWidth;
+              canvas.height = source.videoHeight;
+            }
+          }
+          const ctx = canvas.getContext('2d', { willReadFrequently: true });
+          if (!ctx || canvas.width === 0) {
+            requestAnimationFrame(processFxWhiteKey);
+            return;
+          }
+          ctx.drawImage(source, 0, 0);
+          applyWhiteKey(ctx, canvas.width, canvas.height);
+          requestAnimationFrame(processFxWhiteKey);
+        }
+
+        const fxVideo = document.getElementById('fx-video-source');
+        if (fxVideo) {
+          fxVideo.play().catch(function () { });
+          processFxWhiteKey();
+        }
+      })();
+    </script>
+    <script src="./demo.ts" type="module"></script>
+
+  </div>
+
+</body>
+
+</html>
