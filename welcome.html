@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="en" class="welcome-page">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Plus+Jakarta+Sans:wght@500;700&family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet" />
+  <link href="/styles/main.css" rel="stylesheet" />
+</head>
+
+<body class="welcome-page">
+  <audio id="eva-chroma-audio" autoplay playsinline class="hidden-deps"></audio>
+  <main aria-label="Welcome">
+    <div class="preview-cont">
+      <img class="brand-logo" src="/media/hdfc-logo.svg" alt="HDFC Bank" />
+      <h1 class="title">Digital Banking Unit</h1>
+      <p class="subtitle">Smart way to your banking experience</p>
+      <section class="welcome-copy" id="welcome-copy">
+        <p class="welcome-line" id="welcome-line">Welcome!</p>
+        <h2 class="eva-line">I am Eva</h2>
+        <p class="assist-line">Your All New Smart AI Assistant.</p>
+      </section>
+      <p class="help-line" id="help-line">How may I help you today?</p>
+      <section class="eva-frame">
+        <div id="participants-area">
+          <div class="participants-area-eva">
+            <div class="media-wrapper">
+              <div class="eva-stage">
+                <video id="fx-video-source" class="fx-video-source" src="/ui/fx.mp4" autoplay loop muted
+                  playsinline></video>
+                <canvas id="fx-canvas" class="fx-under-eva"></canvas>
+                <video class="fx-layer fx-underlay" src="/ui/fx.mp4" autoplay loop muted playsinline></video>
+                <div class="eva-static-layer">
+                  <canvas id="eva-static-canvas" class="eva-canvas eva-static-canvas" width="1280"
+                    height="720"></canvas>
+                </div>
+                <div class="eva-agent-layer">
+                  <canvas id="eva-canvas" class="eva-canvas eva-live-canvas" width="1280" height="720"></canvas>
+                </div>
+                <video class="fx-layer fx-overlay" src="/ui/fx.mp4" autoplay loop muted playsinline></video>
+              </div>
+            </div>
+          </div>
+        </div>
+        <img id="eva-static-source" src="/ui/eva_static.jpg" alt="" style="display:none;">
+        <video id="eva-chroma-source" autoplay muted playsinline class="hidden-deps"></video>
+        <canvas id="eva-chroma-canvas" style="display:none;"></canvas>
+      </section>
+      <div class="bottom-card">
+        <div class="date-text" id="transcription-display"></div>
+        <div class="orb-container">
+          <img id="orb-blob" src="/ui/blob-listening.gif" alt="Blob" class="orb-gif" />
+        </div>
+      </div>
+    </div>
+    <div class="action-cont">
+      <section class="forex-showcase" id="forex-showcase" aria-hidden="true">
+        <h2 class="forex-title">We offer Forex Cards with</h2>
+        <div class="final-card welcome-final-card">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <div class="title-pill">Multicurrency Platinum ForexPlus</div>
+          <div class="cards" id="welcome-cards-carousel">
+            <div class="cards-track">
+              <div class="card-wrap" data-title="Regalia ForexPlus">
+                <div class="card">
+                  <img src="/ui/card1.png" alt="Forex card 1 preview" />
+                </div>
+              </div>
+              <div class="card-wrap" data-title="ISIC Student ForexPlus">
+                <div class="card">
+                  <img src="/ui/card2.png" alt="Forex card 2 preview" />
+                </div>
+              </div>
+              <div class="card-wrap" data-title="Multicurrency Platinum ForexPlus">
+                <div class="card">
+                  <img src="/ui/card3.png" alt="Forex card 3 preview" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <h3 class="benefits-title">Benefits that come along</h3> -->
+        <section class="info welcome-info">
+          <article class="info-card info-card-currencies">
+            <span class="info-icon-chip" aria-hidden="true">
+              <img class="info-card-icon" src="/media/currencies.svg" alt="" />
+            </span>
+            <p>22 Currencies</p>
+          </article>
+          <article class="info-card info-card-spend">
+            <span class="info-icon-chip" aria-hidden="true">
+              <img class="info-card-icon" src="/media/spendmonitor.svg" alt="" />
+            </span>
+            <p>Spend Monitor</p>
+          </article>
+          <article class="info-card info-card-support">
+            <span class="info-icon-chip" aria-hidden="true">
+              <img class="info-card-icon" src="/media/customersupport.svg" alt="" />
+            </span>
+            <p>Customer Support</p>
+          </article>
+        </section>
+      </section>
+      <section class="address-verify-showcase" id="address-verify-showcase" aria-hidden="true">
+        <div class="verify-methods-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="verify-methods" id="welcome-verify-methods">
+            <div class="verify-methods-head-glow" aria-hidden="true"></div>
+            <p class="verify-methods-kicker">Let’s change your Address</p>
+            <div class="verify-methods-head">
+              <h3 class="verify-methods-title">Please choose a verification method</h3>
+              <p class="verify-methods-subtitle">It will be faster via eKYC.</p>
+            </div>
+            <div class="verify-methods-grid" id="welcome-verify-methods-grid">
+              <article class="verify-method-card verify-method-card--ekyc" data-method="ekyc" role="button" tabindex="0">
+                <div class="verify-method-surface">
+                  <div class="verify-method-copy">
+                    <p class="verify-method-line1">Aadhaar</p>
+                    <p class="verify-method-line2">eKYC</p>
+                  </div>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art verify-method-art--ekyc">
+                    <img src="/media/verify-ekyc.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+              <article class="verify-method-card" data-method="digilocker" role="button" tabindex="0">
+                <div class="verify-method-surface">
+                  <p class="verify-method-label">DigiLocker</p>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art verify-method-art--tilt-left">
+                    <img src="/media/verify-digilocker.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+              <article class="verify-method-card" data-method="ckyc" role="button" tabindex="0">
+                <div class="verify-method-surface">
+                  <p class="verify-method-label">CKYC</p>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art">
+                    <img src="/media/verify-ckyc.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+              <article class="verify-method-card" data-method="documents" role="button" tabindex="0">
+                <div class="verify-method-surface">
+                  <p class="verify-method-label">Official Valid Documents</p>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art verify-method-art--tilt-right">
+                    <img src="/media/verify-documents.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="address-consent-showcase" id="address-consent-showcase" aria-hidden="true">
+        <section class="address-consent" id="welcome-address-consent" aria-label="Address consent">
+          <div class="address-consent-inner">
+            <header class="address-consent-head">
+              <h3 class="address-consent-title">Great!</h3>
+              <p class="address-consent-subtitle">We will need your consent to proceed.</p>
+            </header>
+            <div class="address-consent-hero">
+              <img class="address-consent-circle" src="/media/consent-circle.svg" alt="" />
+              <div class="address-consent-character">
+                <img src="/media/consent-character.png" alt="" />
+              </div>
+              <div class="address-consent-message">
+                <p>Your Aadhaar will be used to fetch your latest address</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section class="address-next-showcase" id="address-next-showcase" aria-hidden="true">
+        <section class="address-aadhaar-verify" id="welcome-address-aadhaar-verify" aria-label="Verify Aadhaar">
+          <div class="address-aadhaar-verify-inner">
+            <header class="address-aadhaar-verify-head">
+              <h3 class="address-aadhaar-verify-title">Thank you!</h3>
+              <p class="address-aadhaar-verify-subtitle">Let’s verify your Aadhaar</p>
+            </header>
+            <div class="address-aadhaar-verify-hero">
+              <img class="address-aadhaar-verify-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+              <div class="address-aadhaar-verify-icon" aria-hidden="true">
+                <img src="/media/aadhaar-verify-ekyc.png" alt="" />
+              </div>
+              <div class="address-aadhaar-verify-panel">
+                <p class="address-aadhaar-verify-panel-title">Details as per bank records</p>
+                <div class="address-aadhaar-verify-row">
+                  <span class="address-aadhaar-verify-row-label">Aadhaar Number</span>
+                  <span class="address-aadhaar-verify-row-value">••••&nbsp;&nbsp;••••&nbsp;&nbsp;1234</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section class="address-verified-success-showcase" id="address-verified-success-showcase" aria-hidden="true">
+        <section class="aadhaar-verified-success" id="welcome-address-verified-success" aria-label="Aadhaar verified successfully">
+          <div class="aadhaar-verified-success-inner">
+            <div class="aadhaar-verified-success-visual" aria-hidden="true">
+              <img src="/media/aadhaar-verified-success-hero.png" alt="" />
+            </div>
+            <div class="aadhaar-verified-success-body-stage">
+              <img class="address-aadhaar-verify-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+              <div class="aadhaar-verified-success-body">
+                <div class="aadhaar-verified-success-head">
+                  <h3 class="aadhaar-verified-success-title">Aadhaar Verified Successfully!</h3>
+                  <p class="aadhaar-verified-success-subtitle">As per new RBI guidelines, your Aadhaar is getting verified in the background.</p>
+                </div>
+                <div class="aadhaar-verified-success-secure">
+                  <span class="aadhaar-verified-success-shield" aria-hidden="true">
+                    <img src="/media/aadhaar-verified-shield.svg" alt="" />
+                  </span>
+                  <p class="aadhaar-verified-success-secure-text">Your information is encrypted and secure.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section class="address-select-showcase" id="address-select-showcase" aria-hidden="true">
+        <section class="address-select" id="welcome-address-select" aria-label="Select the address you want to change">
+          <div class="address-select-inner">
+            <div class="address-select-followup">
+              <img class="address-aadhaar-verify-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+              <header class="address-select-head address-select-head--picking">
+                <h3 class="address-select-title">
+                  <span>Select the address</span>
+                  <span>you want to change</span>
+                </h3>
+              </header>
+              <header class="address-select-head address-select-head--confirm" aria-hidden="true">
+                <p class="address-select-confirm-kicker">Got it!</p>
+                <p class="address-select-confirm-lead">Shall we go ahead with this address?</p>
+              </header>
+              <header class="address-select-head address-select-head--review" aria-hidden="true">
+                <h3 class="address-select-review-title">
+                  <span class="address-select-review-title-line">Just check your </span>
+                  <span class="address-select-review-title-line">updated address</span>
+                </h3>
+              </header>
+              <div class="address-select-cards" id="welcome-address-select-cards">
+                <article class="address-select-card" data-address-type="permanent" role="button" tabindex="0" aria-pressed="false">
+                  <span class="address-select-radio" aria-hidden="true">
+                    <img class="address-select-radio-check" src="/media/address-select-radio-check.svg" alt="" />
+                  </span>
+                  <div class="address-select-card-copy">
+                    <span class="address-select-badge">As per Bank Records</span>
+                    <p class="address-select-card-title">Permanent Address</p>
+                    <p class="address-select-card-address" data-default-address="101 Aecs Layout, Whitefield, Bengaluru">101 Aecs Layout, Whitefield, Bengaluru</p>
+                  </div>
+                  <div class="address-select-card-art address-select-card-art--permanent" aria-hidden="true">
+                    <img src="/media/address-select-permanent.png" alt="" />
+                  </div>
+                </article>
+                <article class="address-select-card" data-address-type="communication" role="button" tabindex="0" aria-pressed="false">
+                  <span class="address-select-radio" aria-hidden="true">
+                    <img class="address-select-radio-check" src="/media/address-select-radio-check.svg" alt="" />
+                  </span>
+                  <div class="address-select-card-copy">
+                    <span class="address-select-badge">As per Bank Records</span>
+                    <p class="address-select-card-title">Communication Address</p>
+                    <p class="address-select-card-address" data-default-address="14, Tulip Residency, Bellandur, Bengaluru 560103">14, Tulip Residency, Bellandur, Bengaluru 560103</p>
+                  </div>
+                  <div class="address-select-card-art address-select-card-art--communication" aria-hidden="true">
+                    <img src="/media/address-select-communication.png" alt="" />
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section class="self-verify-methods-showcase" id="self-verify-methods-showcase" aria-hidden="true">
+        <div class="verify-methods-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="verify-methods" id="welcome-self-verify-methods" aria-label="How do you want to verify yourself">
+            <div class="verify-methods-head-glow" aria-hidden="true"></div>
+            <div class="verify-methods-head">
+              <h3 class="verify-methods-title">Okay!</h3>
+              <p class="verify-methods-kicker">One final step and it’s done</p>
+            </div>
+            <p class="verify-methods-subtitle">How do you want<br />to verify yourself?</p>
+            
+            <div class="verify-methods-grid" id="welcome-self-verify-methods-grid">
+              <article class="verify-method-card verify-method-card--ekyc" data-method="face-auth" role="button" tabindex="0" aria-pressed="false">
+                <div class="verify-method-surface">
+                  <div class="verify-method-copy">
+                    <p class="verify-method-line1">Face Auth</p>
+                    <p class="verify-method-line2">Secured Bank Face ID</p>
+                  </div>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art verify-method-art--ekyc typ1">
+                    <img src="/media/self-verify-face-auth.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+              <article class="verify-method-card" data-method="kavach" role="button" tabindex="0" aria-pressed="false">
+                <div class="verify-method-surface">
+                  <div class="verify-method-copy">
+                    <p class="verify-method-line1">Kavach</p>
+                    <p class="verify-method-line2">Secured Bank App QR</p>
+                  </div>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art verify-method-art--tilt-left typ1">
+                    <img src="/media/self-verify-kavach.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+              <article class="verify-method-card" data-method="debit-card" role="button" tabindex="0" aria-pressed="false">
+                <div class="verify-method-surface">
+                  <p class="verify-method-label">Debit Card</p>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art typ1">
+                    <img src="/media/self-verify-debit-card.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+              <article class="verify-method-card" data-method="netbanking" role="button" tabindex="0" aria-pressed="false">
+                <div class="verify-method-surface">
+                  <p class="verify-method-label">Netbanking</p>
+                  <span class="verify-method-accent" aria-hidden="true"></span>
+                  <div class="verify-method-art verify-method-art--tilt-right typ1">
+                    <img src="/media/self-verify-netbanking.png" alt="" />
+                  </div>
+                  <span class="verify-method-success" aria-hidden="true"></span>
+                  <span class="verify-method-active-glow" aria-hidden="true"></span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="face-scan-showcase" id="face-scan-showcase" aria-hidden="true">
+        <div class="face-scan-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="face-scan" id="welcome-face-scan" aria-label="Scanning your face">
+            <img class="address-aadhaar-verify-circle face-scan-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+            <div class="face-scan-inner">
+              <header class="face-scan-head">
+                <h3 class="face-scan-title">Scanning Your Face</h3>
+                <p class="face-scan-subtitle">Please look streight</p>
+              </header>
+              <div class="face-scan-viewport" id="welcome-face-scan-viewport" data-face-scan data-face-scan-autostart="false" data-face-scan-mirror="true" data-face-scan-seconds="5" role="region" aria-label="Face camera">
+                <video class="face-scan-video" playsinline muted autoplay></video>
+                <canvas class="face-scan-canvas" hidden></canvas>
+                <img class="face-scan-preview" alt="Captured face photo" hidden />
+                <p class="face-scan-countdown" aria-live="assertive" hidden></p>
+                <p class="face-scan-status" hidden></p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="address-request-submitted-showcase" id="address-request-submitted-showcase" aria-hidden="true">
+        <div class="address-request-submitted-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="address-request-submitted" id="welcome-address-request-submitted" aria-label="Request submitted">
+            <div class="address-request-submitted-inner">
+              <header class="address-request-submitted-head">
+                <h3 class="address-request-submitted-title">Request Submitted!</h3>
+                <p class="address-request-submitted-subtitle">Your new communication address will be updated within 24 hrs.</p>
+              </header>
+              <div class="address-request-submitted-body">
+                <div class="address-request-submitted-hero">
+                  <img class="address-aadhaar-verify-circle address-request-submitted-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                  <img class="address-request-submitted-hero-img" src="/media/address-request-success-hero.png" alt="" />
+                </div>
+                <div class="address-request-submitted-card-wrap">
+                  <article class="address-request-submitted-card">
+                    <div class="address-request-submitted-row address-request-submitted-row--sr">
+                      <span class="address-request-icon address-request-icon--sr" aria-hidden="true">
+                        <img class="address-request-icon-chip" src="/media/address-request-icon-chip.svg" alt="" />
+                        <span class="address-request-icon-invoice">
+                          <img class="address-request-icon-layer address-request-icon-layer--doc-body" src="/media/address-request-invoice-doc.svg" alt="" />
+                          <img class="address-request-icon-layer address-request-icon-layer--doc-top" src="/media/address-request-sr-doc-top.svg" alt="" />
+                          <img class="address-request-icon-layer address-request-icon-layer--lines" src="/media/address-request-sr-icon.svg" alt="" />
+                          <img class="address-request-icon-layer address-request-icon-layer--badge" src="/media/address-request-sr-badge.svg" alt="" />
+                        </span>
+                      </span>
+                      <div class="address-request-row-copy address-request-row-copy--sr">
+                        <p class="address-request-row-label">Service Request ID</p>
+                        <p class="address-request-row-value" id="welcome-address-request-sr-id">52-852-291-6JH</p>
+                      </div>
+                      <button type="button" class="address-request-copy" data-copy-target="welcome-address-request-sr-id" aria-label="Copy service request ID">
+                        <img src="/media/address-request-copy.svg" alt="" />
+                      </button>
+                    </div>
+                    <div class="address-request-divider" role="presentation"></div>
+                    <div class="address-request-submitted-row address-request-submitted-row--address">
+                      <span class="address-request-icon address-request-icon--address" aria-hidden="true">
+                        <img class="address-request-icon-chip" src="/media/address-request-icon-chip.svg" alt="" />
+                        <img class="address-request-icon-art address-request-icon-art--address" src="/media/address-request-address-icon.svg" alt="" />
+                      </span>
+                      <div class="address-request-row-copy address-request-row-copy--address">
+                        <p class="address-request-row-label">New Communication Address</p>
+                        <p class="address-request-row-value address-request-row-value--address" id="welcome-address-request-new-address">101 Aecs Layout, Whitefield, Bengaluru</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="travel-details-needed-showcase" id="travel-details-needed-showcase" aria-hidden="true">
+        <div class="travel-details-needed-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="travel-details-needed" id="welcome-travel-details-needed" aria-label="We need the following details">
+            <div class="travel-details-needed-inner">
+              <div class="travel-details-needed-followup">
+                <img class="address-aadhaar-verify-circle travel-details-needed-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <div class="travel-details-needed-head">
+                  <h3 class="travel-details-needed-title">We need the following details</h3>
+                </div>
+                <div class="travel-details-needed-grid" id="welcome-travel-details-needed-grid">
+                  <div class="travel-details-needed-row">
+                    <article class="travel-details-needed-card" data-detail-key="places" role="button" tabindex="0" aria-pressed="false">
+                      <span class="travel-details-needed-bg" aria-hidden="true"></span>
+                      <span class="travel-details-needed-glow" aria-hidden="true"></span>
+                      <span class="travel-details-needed-tint" aria-hidden="true"></span>
+                      <div class="travel-details-needed-content">
+                        <div class="travel-details-needed-title-stack">
+                          <p class="travel-details-needed-title-line">Country(ies)</p>
+                          <p class="travel-details-needed-title-line">to Visit</p>
+                        </div>
+                        <span class="travel-details-needed-divider" aria-hidden="true"></span>
+                      </div>
+                      <div class="travel-details-needed-icon-slot">
+                        <div class="travel-details-needed-icon-place">
+                          <div class="travel-details-needed-icon">
+                            <div class="travel-details-needed-icon-art travel-details-needed-icon-art--places">
+                              <img src="/media/travel-details-countries.png" alt="" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="travel-details-needed-success" aria-hidden="true">
+                        <img class="travel-details-needed-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                        <img class="travel-details-needed-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                      </span>
+                    </article>
+                    <article class="travel-details-needed-card" data-detail-key="purpose" role="button" tabindex="0" aria-pressed="false">
+                      <span class="travel-details-needed-bg" aria-hidden="true"></span>
+                      <span class="travel-details-needed-glow" aria-hidden="true"></span>
+                      <span class="travel-details-needed-tint" aria-hidden="true"></span>
+                      <div class="travel-details-needed-content">
+                        <p class="travel-details-needed-label">Purpose of Travel</p>
+                        <span class="travel-details-needed-divider" aria-hidden="true"></span>
+                      </div>
+                      <div class="travel-details-needed-icon-place">
+                        <div class="travel-details-needed-icon">
+                          <div class="travel-details-needed-icon-art travel-details-needed-icon-art--purpose">
+                            <img src="/media/travel-details-purpose.png" alt="" />
+                          </div>
+                        </div>
+                      </div>
+                      <span class="travel-details-needed-success" aria-hidden="true">
+                        <img class="travel-details-needed-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                        <img class="travel-details-needed-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                      </span>
+                    </article>
+                  </div>
+                  <div class="travel-details-needed-row">
+                    <article class="travel-details-needed-card" data-detail-key="departure" role="button" tabindex="0" aria-pressed="false">
+                      <span class="travel-details-needed-bg" aria-hidden="true"></span>
+                      <span class="travel-details-needed-glow" aria-hidden="true"></span>
+                      <span class="travel-details-needed-tint" aria-hidden="true"></span>
+                      <div class="travel-details-needed-content">
+                        <p class="travel-details-needed-label">Date of Departure</p>
+                        <span class="travel-details-needed-divider" aria-hidden="true"></span>
+                      </div>
+                      <div class="travel-details-needed-icon-slot">
+                        <div class="travel-details-needed-icon-place">
+                          <div class="travel-details-needed-icon">
+                            <div class="travel-details-needed-icon-art travel-details-needed-icon-art--departure">
+                              <img src="/media/travel-details-departure.png" alt="" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="travel-details-needed-success" aria-hidden="true">
+                        <img class="travel-details-needed-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                        <img class="travel-details-needed-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                      </span>
+                    </article>
+                    <article class="travel-details-needed-card" data-detail-key="currency" role="button" tabindex="0" aria-pressed="false">
+                      <span class="travel-details-needed-bg" aria-hidden="true"></span>
+                      <span class="travel-details-needed-glow" aria-hidden="true"></span>
+                      <span class="travel-details-needed-tint" aria-hidden="true"></span>
+                      <div class="travel-details-needed-content">
+                        <p class="travel-details-needed-label">Transaction Currency</p>
+                        <span class="travel-details-needed-divider" aria-hidden="true"></span>
+                      </div>
+                      <div class="travel-details-needed-icon-place">
+                        <div class="travel-details-needed-icon">
+                          <div class="travel-details-needed-icon-art travel-details-needed-icon-art--currency">
+                            <img src="/media/travel-details-currency.png" alt="" />
+                          </div>
+                        </div>
+                      </div>
+                      <span class="travel-details-needed-success" aria-hidden="true">
+                        <img class="travel-details-needed-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                        <img class="travel-details-needed-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                      </span>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="welcome-best-card-screen" id="welcome-best-card-screen" aria-hidden="true">
+        <div class="best-suited-card-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="best-suited-card" id="welcome-best-suited-card" aria-label="The best suited card for you">
+            <div class="best-suited-card-inner">
+              <img class="address-aadhaar-verify-circle best-suited-card-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+              <header class="best-suited-card-head">
+                <h3 class="best-suited-card-title">The best suited card for you</h3>
+              </header>
+              <div class="best-suited-card-hero">
+                <div class="best-suited-card-image-wrap" aria-hidden="true">
+                  <img class="best-suited-card-image" src="/media/best-suited-card-forex.png" alt="" />
+                </div>
+                <div class="best-suited-card-details">
+                  <p class="best-suited-card-name">Multicurrency Platinum ForexPlus</p>
+                  <div class="best-suited-card-price-pill">
+                    <p class="best-suited-card-price-line">&#8377;1,000 + &#8377;180 GST</p>
+                    <img class="best-suited-card-price-dot" src="/media/best-suited-card-price-dot.svg" alt="" />
+                    <p class="best-suited-card-price-line">No Annual Fees</p>
+                  </div>
+                </div>
+              </div>
+              <div class="best-suited-card-features">
+                <article class="best-suited-card-feature">
+                  <span class="best-suited-card-feature-chip best-suited-card-feature-chip--markup" aria-hidden="true">
+                    <img class="best-suited-card-feature-icon" src="/media/currencies.svg" alt="" />
+                  </span>
+                  <div class="best-suited-card-feature-copy">
+                    <p class="best-suited-card-feature-title">Zero Markup</p>
+                    <p class="best-suited-card-feature-subtitle">No Currency conversion mark-up charges</p>
+                  </div>
+                </article>
+                <article class="best-suited-card-feature">
+                  <span class="best-suited-card-feature-chip best-suited-card-feature-chip--currency" aria-hidden="true">
+                    <img class="best-suited-card-feature-icon" src="/media/globalcurrency.svg" alt="" />
+                  </span>
+                  <div class="best-suited-card-feature-copy">
+                    <p class="best-suited-card-feature-title">Global Currency</p>
+                    <p class="best-suited-card-feature-subtitle">Access global currency and spend worldwide*</p>
+                  </div>
+                </article>
+                <article class="best-suited-card-feature">
+                  <span class="best-suited-card-feature-chip best-suited-card-feature-chip--lounge" aria-hidden="true">
+                    <img class="best-suited-card-feature-icon" src="/media/lounge.svg" alt="" />
+                  </span>
+                  <div class="best-suited-card-feature-copy">
+                    <p class="best-suited-card-feature-title">Lounge Privilege</p>
+                    <p class="best-suited-card-feature-subtitle">Complimentary Lounge access to international airports in India</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="cash-withdraw-showcase" id="cash-withdraw-showcase" aria-hidden="true">
+        <div class="cash-withdraw-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="cash-withdraw" id="welcome-cash-withdraw" aria-label="How much cash you want to withdraw">
+            <div class="cash-withdraw-inner">
+              <div class="cash-withdraw-followup">
+                <img class="address-aadhaar-verify-circle cash-withdraw-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="cash-withdraw-title">How much cash you want to withdraw?</h3>
+                <div class="cash-withdraw-hero" aria-hidden="true">
+                  <div class="cash-withdraw-hero-frame">
+                    <img class="cash-withdraw-hero-img" src="/media/cash-withdraw-hero.png" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="cash-withdraw-consent-showcase" id="cash-withdraw-consent-showcase" aria-hidden="true">
+        <section class="cash-withdraw-consent" id="welcome-cash-withdraw-consent" aria-label="Confirm cash withdrawal">
+          <div class="cash-withdraw-consent-inner">
+            <header class="cash-withdraw-consent-head">
+              <h3 class="cash-withdraw-consent-title">Great!</h3>
+              <p class="cash-withdraw-consent-subtitle">Please confirm to proceed.</p>
+            </header>
+            <div class="cash-withdraw-consent-hero">
+              <img class="cash-withdraw-consent-circle" src="/media/consent-circle.svg" alt="" />
+              <div class="cash-withdraw-consent-character">
+                <img src="/media/cash-withdraw-consent-character.png" alt="" />
+              </div>
+              <div class="cash-withdraw-consent-message">
+                <p>
+                  You want to withdraw <span class="cash-withdraw-consent-amount" id="welcome-cash-withdraw-consent-amount">₹20,000.00</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+      <section class="cash-withdraw-debit-slot-showcase" id="cash-withdraw-debit-slot-showcase" aria-hidden="true">
+        <div class="cash-withdraw-debit-slot-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="cash-withdraw-debit-slot" id="welcome-cash-withdraw-debit-slot" aria-label="Insert your debit card in the card slot">
+            <div class="cash-withdraw-debit-slot-inner">
+              <div class="cash-withdraw-debit-slot-followup">
+                <img class="address-aadhaar-verify-circle cash-withdraw-debit-slot-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <header class="cash-withdraw-debit-slot-head">
+                  <h3 class="cash-withdraw-debit-slot-title">Thank you!</h3>
+                  <p class="cash-withdraw-debit-slot-subtitle">Let&rsquo;s insert your Debit Card in card slot</p>
+                </header>
+                <div class="cash-withdraw-debit-slot-hero" aria-hidden="true">
+                  <div class="cash-withdraw-debit-slot-hero-frame">
+                    <img class="cash-withdraw-debit-slot-hero-img" src="/media/cash-withdraw-debit-slot-hero.png" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="cash-withdraw-bank-details-showcase" id="cash-withdraw-bank-details-showcase" aria-hidden="true">
+        <div class="cash-withdraw-bank-details-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="cash-withdraw-bank-details" id="welcome-cash-withdraw-bank-details" aria-label="Details as per bank records">
+            <div class="cash-withdraw-bank-details-inner">
+              <div class="cash-withdraw-bank-details-followup">
+                <img class="address-aadhaar-verify-circle cash-withdraw-bank-details-circle" src="/media/consent-circle.svg" alt="" />
+                <div class="cash-withdraw-bank-details-stack">
+                  <div class="cash-withdraw-bank-details-hero" aria-hidden="true">
+                    <div class="cash-withdraw-bank-details-hero-frame">
+                      <img class="cash-withdraw-bank-details-hero-img" id="welcome-cash-withdraw-bank-details-hero-img" src="/media/cash-withdraw-bank-details-hero.png" alt="" />
+                    </div>
+                  </div>
+                  <div class="cash-withdraw-bank-details-panel">
+                    <h3 class="cash-withdraw-bank-details-title" id="welcome-cash-withdraw-bank-details-title">Details as per Bank Records</h3>
+                    <div class="cash-withdraw-bank-details-rows" id="welcome-cash-withdraw-bank-details-rows">
+                      <div class="cash-withdraw-bank-details-row">
+                        <span class="cash-withdraw-bank-details-label">Saving Account</span>
+                        <span class="cash-withdraw-bank-details-value" id="welcome-cash-withdraw-bank-details-account">*****6789</span>
+                      </div>
+                      <div class="cash-withdraw-bank-details-row">
+                        <span class="cash-withdraw-bank-details-label">Account Balance as on 15th May 2026.</span>
+                        <span class="cash-withdraw-bank-details-value" id="welcome-cash-withdraw-bank-details-balance">&#8377;6,45,000</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="cash-withdraw-bank-details-footer" id="welcome-cash-withdraw-bank-details-footer">Please confirm to proceed</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="otp-verify-showcase" id="otp-verify-showcase" aria-hidden="true">
+        <div class="otp-verify-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="otp-verify" id="welcome-otp-verify" aria-label="OTP">
+            <div class="otp-verify-inner">
+              <h3 class="otp-verify-title" id="welcome-otp-verify-title">OTP</h3>
+              <div class="otp-verify-content">
+                <img class="address-aadhaar-verify-circle otp-verify-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <div class="otp-verify-hero" aria-hidden="true">
+                  <span class="otp-verify-icon">
+                    <img src="/media/otp-verify-phone.png" alt="" />
+                  </span>
+                </div>
+                <p class="otp-verify-subtitle" id="welcome-otp-verify-subtitle">
+                  Please provide <strong>6-digit OTP</strong> received on your mobile number **8678
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-payee-showcase" id="send-money-payee-showcase" aria-hidden="true">
+        <div class="send-money-payee-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="send-money-payee" id="welcome-send-money-payee" aria-label="Whom would you like to send money to">
+            <div class="send-money-payee-inner">
+              <div class="send-money-payee-followup">
+                <img class="address-aadhaar-verify-circle send-money-payee-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="send-money-payee-title">Sure, Whom would you like to send money to?</h3>
+                <div class="send-money-payee-hero" aria-hidden="true">
+                  <div class="send-money-payee-hero-frame">
+                    <img class="send-money-payee-hero-img" src="/media/send-money-payee-hero.png" alt="" />
+                  </div>
+                </div>
+                <p class="send-money-payee-subtitle">You can enter payee name/nickname/account number.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-payee-suggest-showcase" id="send-money-payee-suggest-showcase" aria-hidden="true">
+        <div class="send-money-payee-suggest-stage">
+          <section class="send-money-payee-suggest" id="welcome-send-money-payee-suggest" aria-label="Suggested payee">
+            <div class="send-money-payee-suggest-inner">
+              <div class="send-money-payee-suggest-followup">
+                <img class="address-aadhaar-verify-circle send-money-payee-suggest-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="send-money-payee-suggest-title">
+                  Got it!
+                  <br aria-hidden="true" />
+                  This seems, you usually send money to
+                </h3>
+                <article class="send-money-payee-suggest-card">
+                  <div class="send-money-payee-suggest-logo" aria-hidden="true">
+                    <img class="send-money-payee-suggest-logo-bank" src="/media/send-money-payee-suggest-bank.svg" alt="" />
+                    <img class="send-money-payee-suggest-logo-img" src="/media/send-money-payee-suggest-logo.png" alt="" />
+                  </div>
+                  <div class="send-money-payee-suggest-info">
+                    <div class="send-money-payee-suggest-name">
+                      <p class="send-money-payee-suggest-name-primary">Digvijay Shelar</p>
+                      <p class="send-money-payee-suggest-name-secondary">Brother</p>
+                    </div>
+                    <div class="send-money-payee-suggest-account">
+                      <p class="send-money-payee-suggest-account-label">Current A/C</p>
+                      <p class="send-money-payee-suggest-account-number">**** 2323</p>
+                    </div>
+                  </div>
+                </article>
+                <p class="send-money-payee-suggest-subtitle">Shall we proceed with this one?</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-payee-list-showcase" id="send-money-payee-list-showcase" aria-hidden="true">
+        <div class="send-money-payee-list-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="send-money-payee-list" id="welcome-send-money-payee-list" aria-label="Select payee from list">
+            <div class="send-money-payee-list-inner">
+              <div class="send-money-payee-list-followup">
+                <img class="address-aadhaar-verify-circle send-money-payee-list-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="send-money-payee-list-title">Here are your payees named Digvijay</h3>
+                <div class="send-money-payee-list-accounts" id="welcome-send-money-payee-list-accounts">
+                  <article class="send-money-payee-list-card" data-payee="shelar" role="button" tabindex="0" aria-pressed="false">
+                    <div class="send-money-payee-list-logo" aria-hidden="true">
+                      <img class="send-money-payee-list-logo-bg" src="/media/send-money-payee-suggest-bank.svg" alt="" />
+                      <img class="send-money-payee-list-logo-img send-money-payee-list-logo-img--shelar" src="/media/send-money-payee-suggest-logo.png" alt="" />
+                    </div>
+                    <div class="send-money-payee-list-info">
+                      <div class="send-money-payee-list-name">
+                        <p class="send-money-payee-list-name-primary">Digvijay Shelar</p>
+                        <p class="send-money-payee-list-name-secondary">Brother</p>
+                      </div>
+                      <div class="send-money-payee-list-account">
+                        <p class="send-money-payee-list-account-label">Current A/C</p>
+                        <p class="send-money-payee-list-account-number">**** 2323</p>
+                      </div>
+                    </div>
+                    <span class="send-money-payee-list-radio" aria-hidden="true">
+                      <img class="send-money-payee-list-radio-check" src="/media/send-money-payee-list-check.svg" alt="" />
+                    </span>
+                  </article>
+                  <article class="send-money-payee-list-card" data-payee="kumar" role="button" tabindex="0" aria-pressed="false">
+                    <div class="send-money-payee-list-logo" aria-hidden="true">
+                      <img class="send-money-payee-list-logo-bg" src="/media/send-money-payee-list-bank-bg.svg" alt="" />
+                      <img class="send-money-payee-list-logo-img send-money-payee-list-logo-img--sbi" src="/media/send-money-payee-list-sbi.png" alt="" />
+                    </div>
+                    <div class="send-money-payee-list-info">
+                      <div class="send-money-payee-list-name">
+                        <p class="send-money-payee-list-name-primary">Digvijay Kumar</p>
+                        <p class="send-money-payee-list-name-secondary">Friend</p>
+                      </div>
+                      <div class="send-money-payee-list-account">
+                        <p class="send-money-payee-list-account-label">Saving A/C</p>
+                        <p class="send-money-payee-list-account-number">**** 5456</p>
+                      </div>
+                    </div>
+                    <span class="send-money-payee-list-radio" aria-hidden="true">
+                      <img class="send-money-payee-list-radio-check" src="/media/send-money-payee-list-check.svg" alt="" />
+                    </span>
+                  </article>
+                  <article class="send-money-payee-list-card" data-payee="enterprises" role="button" tabindex="0" aria-pressed="false">
+                    <div class="send-money-payee-list-logo" aria-hidden="true">
+                      <img class="send-money-payee-list-logo-bg" src="/media/send-money-payee-list-bank-bg.svg" alt="" />
+                      <img class="send-money-payee-list-logo-img send-money-payee-list-logo-img--icici" src="/media/send-money-payee-list-icici.png" alt="" />
+                    </div>
+                    <div class="send-money-payee-list-info">
+                      <div class="send-money-payee-list-name">
+                        <p class="send-money-payee-list-name-primary">Digvijay Enterprises</p>
+                        <p class="send-money-payee-list-name-secondary">Friend</p>
+                      </div>
+                      <div class="send-money-payee-list-account">
+                        <p class="send-money-payee-list-account-label">Saving A/C</p>
+                        <p class="send-money-payee-list-account-number">**** 9080</p>
+                      </div>
+                    </div>
+                    <span class="send-money-payee-list-radio" aria-hidden="true">
+                      <img class="send-money-payee-list-radio-check" src="/media/send-money-payee-list-check.svg" alt="" />
+                    </span>
+                  </article>
+                </div>
+                <p class="send-money-payee-list-subtitle">You can select a by payee name/nickname/account number.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-amount-showcase" id="send-money-amount-showcase" aria-hidden="true">
+        <div class="send-money-amount-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="send-money-amount" id="welcome-send-money-amount" aria-label="Enter the amount you would like to send">
+            <div class="send-money-amount-inner">
+              <div class="send-money-amount-followup">
+                <img class="address-aadhaar-verify-circle send-money-amount-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="send-money-amount-title">Enter the amount you would like to send</h3>
+                <div class="send-money-amount-hero" aria-hidden="true">
+                  <div class="send-money-amount-hero-frame">
+                    <img class="send-money-amount-hero-img" src="/media/send-money-amount-hero.png" alt="" />
+                  </div>
+                </div>
+                <div class="send-money-amount-remark">
+                  <p class="send-money-amount-remark-label">You can add a remark as well</p>
+                  <span class="send-money-amount-remark-chip">Example: &#8377;1000 for trip</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-account-selected-showcase" id="send-money-account-selected-showcase" aria-hidden="true">
+        <div class="send-money-account-selected-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="send-money-account-selected" id="welcome-send-money-account-selected" aria-label="Choose an account you want to pay from">
+            <div class="send-money-account-selected-inner">
+              <div class="send-money-account-selected-followup">
+                <img class="address-aadhaar-verify-circle send-money-account-selected-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="send-money-account-selected-title">Choose an account you want to pay from</h3>
+                <div class="send-money-account-selected-options" id="welcome-send-money-account-selected-options">
+                  <article class="send-money-account-selected-card send-money-account-selected-card--active" data-account="savings" role="button" tabindex="0" aria-pressed="true">
+                    <span class="send-money-account-selected-bg" aria-hidden="true"></span>
+                    <span class="send-money-account-selected-glow" aria-hidden="true"></span>
+                    <span class="send-money-account-selected-tint" aria-hidden="true"></span>
+                    <div class="send-money-account-selected-content">
+                      <div class="send-money-account-selected-row">
+                        <p class="send-money-account-selected-label">Savings Account</p>
+                        <p class="send-money-account-selected-number">*****7673</p>
+                      </div>
+                      <span class="send-money-account-selected-divider" aria-hidden="true"></span>
+                      <p class="send-money-account-selected-balance">&#8377;5,00,000</p>
+                    </div>
+                    <div class="send-money-account-selected-icon send-money-account-selected-icon--savings" aria-hidden="true">
+                      <img src="/media/send-money-account-savings.png" alt="" />
+                    </div>
+                    <span class="send-money-account-selected-success" aria-hidden="true">
+                      <img class="send-money-account-selected-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                      <img class="send-money-account-selected-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                    </span>
+                  </article>
+                  <article class="send-money-account-selected-card" data-account="current" role="button" tabindex="0" aria-pressed="false">
+                    <span class="send-money-account-selected-bg" aria-hidden="true"></span>
+                    <span class="send-money-account-selected-glow" aria-hidden="true"></span>
+                    <span class="send-money-account-selected-tint" aria-hidden="true"></span>
+                    <div class="send-money-account-selected-content">
+                      <div class="send-money-account-selected-row">
+                        <p class="send-money-account-selected-label">Current Account</p>
+                        <p class="send-money-account-selected-number">*****6789</p>
+                      </div>
+                      <span class="send-money-account-selected-divider" aria-hidden="true"></span>
+                      <p class="send-money-account-selected-balance">&#8377;10,50,233</p>
+                    </div>
+                    <div class="send-money-account-selected-icon send-money-account-selected-icon--current" aria-hidden="true">
+                      <img src="/media/send-money-account-current.png" alt="" />
+                    </div>
+                    <span class="send-money-account-selected-success" aria-hidden="true">
+                      <img class="send-money-account-selected-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                      <img class="send-money-account-selected-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                    </span>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-when-showcase" id="send-money-when-showcase" aria-hidden="true">
+        <div class="send-money-when-stage">
+          <section class="send-money-when" id="welcome-send-money-when" aria-label="Do you want to send money now or schedule it for later">
+            <div class="send-money-when-inner">
+              <div class="send-money-when-followup">
+                <img class="address-aadhaar-verify-circle send-money-when-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <h3 class="send-money-when-title">Do you want to send money now or schedule it for later?</h3>
+                <div class="send-money-when-options" id="welcome-send-money-when-options">
+                  <article class="send-money-when-card" data-option="pay-now" role="button" tabindex="0" aria-pressed="false">
+                    <span class="send-money-when-bg" aria-hidden="true"></span>
+                    <span class="send-money-when-glow" aria-hidden="true"></span>
+                    <span class="send-money-when-tint" aria-hidden="true"></span>
+                    <div class="send-money-when-content">
+                      <div class="send-money-when-title-stack">
+                        <p class="send-money-when-title-line">Pay</p>
+                        <p class="send-money-when-title-line">Now</p>
+                      </div>
+                      <span class="send-money-when-divider" aria-hidden="true"></span>
+                    </div>
+                    <div class="send-money-when-icon" aria-hidden="true">
+                      <img src="/media/send-money-when-pay-now.png" alt="" />
+                    </div>
+                    <span class="send-money-when-success" aria-hidden="true">
+                      <img class="send-money-when-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                      <img class="send-money-when-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                    </span>
+                  </article>
+                  <article class="send-money-when-card" data-option="schedule" role="button" tabindex="0" aria-pressed="false">
+                    <span class="send-money-when-bg" aria-hidden="true"></span>
+                    <span class="send-money-when-glow" aria-hidden="true"></span>
+                    <span class="send-money-when-tint" aria-hidden="true"></span>
+                    <div class="send-money-when-content">
+                      <div class="send-money-when-title-stack">
+                        <p class="send-money-when-title-line">Schedule</p>
+                        <p class="send-money-when-title-line">Later</p>
+                      </div>
+                      <span class="send-money-when-divider" aria-hidden="true"></span>
+                    </div>
+                    <div class="send-money-when-icon" aria-hidden="true">
+                      <img src="/media/send-money-when-schedule.png" alt="" />
+                    </div>
+                    <span class="send-money-when-success" aria-hidden="true">
+                      <img class="send-money-when-success-circle" src="/media/send-money-account-success-circle.svg" alt="" />
+                      <img class="send-money-when-success-check" src="/media/send-money-account-success-check.svg" alt="" />
+                    </span>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-preview-showcase" id="send-money-preview-showcase" aria-hidden="true">
+        <div class="send-money-preview-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="send-money-preview" id="welcome-send-money-preview" aria-label="Payment preview">
+            <div class="send-money-preview-inner">
+              <img class="address-aadhaar-verify-circle send-money-preview-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+              <div class="send-money-preview-head">
+                <h3 class="send-money-preview-title">Here&rsquo;s your payment preview</h3>
+              </div>
+              <div class="send-money-preview-card">
+                <div class="send-money-preview-section send-money-preview-section--top">
+                  <p class="send-money-preview-to">
+                    <span class="send-money-preview-to-label">To:</span>
+                    <span class="send-money-preview-to-name">Digvijay Kumar</span>
+                  </p>
+                  <div class="send-money-preview-details">
+                    <div class="send-money-preview-bank">
+                      <span class="send-money-preview-bank-icon" aria-hidden="true">
+                        <img src="/media/send-money-preview-bank.svg" alt="" />
+                      </span>
+                      <p class="send-money-preview-bank-name">State Bank of India</p>
+                    </div>
+                    <p class="send-money-preview-account">Savings A/c: **** 6423</p>
+                  </div>
+                </div>
+                <div class="send-money-preview-amount">
+                  <p class="send-money-preview-amount-value">&#8377;5,000</p>
+                  <span class="send-money-preview-remark">Petrol</span>
+                </div>
+                <div class="send-money-preview-section send-money-preview-section--from">
+                  <div class="send-money-preview-from-grid">
+                    <div class="send-money-preview-from-col">
+                      <p class="send-money-preview-from-label">From</p>
+                      <p class="send-money-preview-from-value">Savings Account</p>
+                      <p class="send-money-preview-from-meta">**** 7673</p>
+                    </div>
+                    <span class="send-money-preview-from-divider" aria-hidden="true">
+                      <img src="/media/send-money-preview-divider.svg" alt="" />
+                    </span>
+                    <div class="send-money-preview-from-col">
+                      <p class="send-money-preview-from-label">Payment Mode</p>
+                      <p class="send-money-preview-from-value">IMPS</p>
+                      <p class="send-money-preview-from-meta">Instant Payment Service</p>
+                    </div>
+                  </div>
+                </div>
+                <a class="send-money-preview-confirm" href="#" role="button">Confirm and Proceed</a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="send-money-success-showcase" id="send-money-success-showcase" aria-hidden="true">
+        <div class="send-money-success-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="send-money-success" id="welcome-send-money-success" aria-label="Transfer successful">
+            <div class="send-money-success-inner">
+              <h3 class="send-money-success-title">
+                <span>Great !</span>
+                <span>Transfer Successful</span>
+              </h3>
+              <div class="send-money-success-hero">
+                <img class="address-aadhaar-verify-circle send-money-success-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+                <span class="send-money-success-icon" aria-hidden="true">
+                  <img src="/media/transfer-success-phone.png" alt="" />
+                </span>
+              </div>
+              <div class="send-money-success-card">
+                <div class="send-money-success-section">
+                  <div class="send-money-success-col">
+                    <p class="send-money-success-label">To</p>
+                    <p class="send-money-success-value">Digvijay Kumar</p>
+                    <p class="send-money-success-meta">SBI | A/C: **** 6423</p>
+                  </div>
+                  <div class="send-money-success-col">
+                    <p class="send-money-success-label">Amount</p>
+                    <p class="send-money-success-value">&#8377;5,000</p>
+                    <p class="send-money-success-meta">Petrol</p>
+                  </div>
+                </div>
+                <div class="send-money-success-section">
+                  <div class="send-money-success-col">
+                    <p class="send-money-success-label">Sent on</p>
+                    <p class="send-money-success-value send-money-success-value--sm">26th May 2026</p>
+                    <p class="send-money-success-meta">05:32 PM</p>
+                  </div>
+                  <div class="send-money-success-col">
+                    <p class="send-money-success-label">From</p>
+                    <p class="send-money-success-value send-money-success-value--sm">Savings Account</p>
+                    <p class="send-money-success-meta">A/C: **** 7673</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="loan-active-list-showcase" id="loan-active-list-showcase" aria-hidden="true">
+        <div class="loan-active-list-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="loan-active-list" id="welcome-loan-active-list" aria-label="You have two active loans with us">
+            <img class="address-aadhaar-verify-circle loan-active-list-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+            <div class="loan-active-list-inner">
+              <header class="loan-active-list-head">
+                <h3 class="loan-active-list-title">You have the two active loans with us as of today</h3>
+              </header>
+              <div class="loan-active-list-cards" id="welcome-loan-active-list-cards">
+                <article class="loan-active-list-card" data-loan="home" role="button" tabindex="0" aria-pressed="false">
+                  <div class="loan-active-list-col">
+                    <p class="loan-active-list-label">Home Loan</p>
+                    <p class="loan-active-list-value">*****6789</p>
+                  </div>
+                  <div class="loan-active-list-col">
+                    <p class="loan-active-list-label">Amount</p>
+                    <p class="loan-active-list-value">&#8377;2,00,00,000</p>
+                  </div>
+                </article>
+                <article class="loan-active-list-card" data-loan="topup" role="button" tabindex="0" aria-pressed="false">
+                  <div class="loan-active-list-col">
+                    <p class="loan-active-list-label">Top-Up&nbsp;&nbsp;Loan</p>
+                    <p class="loan-active-list-value">*****9876</p>
+                  </div>
+                  <div class="loan-active-list-col">
+                    <p class="loan-active-list-label">Amount</p>
+                    <p class="loan-active-list-value">&#8377;35,00,000</p>
+                  </div>
+                </article>
+              </div>
+              <p class="loan-active-list-question">Which loan you want to know more about?</p>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="home-loan-summary-showcase" id="home-loan-summary-showcase" aria-hidden="true">
+        <div class="home-loan-summary-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="home-loan-summary" id="welcome-home-loan-summary" aria-label="Here is your home loan summary">
+            <img class="address-aadhaar-verify-circle home-loan-summary-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+            <div class="home-loan-summary-inner">
+              <header class="home-loan-summary-head">
+                <h3 class="home-loan-summary-title">Here is your home loan summary</h3>
+              </header>
+              <article class="home-loan-summary-card" id="welcome-home-loan-summary-card">
+                <header class="home-loan-summary-card-header">
+                  <p class="home-loan-summary-card-name">Home Loan</p>
+                  <p class="home-loan-summary-card-number">*****6789</p>
+                </header>
+                <div class="home-loan-summary-card-grid">
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">Amount</p>
+                    <p class="home-loan-summary-row-value">&#8377;2,00,00,000</p>
+                  </div>
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">Start Date</p>
+                    <p class="home-loan-summary-row-value">01/05/2022</p>
+                  </div>
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">Interest Rate</p>
+                    <p class="home-loan-summary-row-value">8.5% (Floating)</p>
+                  </div>
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">Balance Tenure</p>
+                    <p class="home-loan-summary-row-value">204 Months</p>
+                  </div>
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">EMI</p>
+                    <p class="home-loan-summary-row-value">&#8377;2,00,00,000</p>
+                  </div>
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">Outstanding Principal</p>
+                    <p class="home-loan-summary-row-value">&#8377;1,84,20,000</p>
+                  </div>
+                  <div class="home-loan-summary-row">
+                    <p class="home-loan-summary-row-label">Principal</p>
+                    <p class="home-loan-summary-row-value">&#8377;1,85,00,000</p>
+                  </div>
+                </div>
+              </article>
+              <p class="home-loan-summary-note">
+                <span>You may prepay any amount up to this limit without any additional charges. (</span>
+                <span>25% of principal outstanding as on 01/04/2026</span>
+                <span>)</span>
+              </p>
+              <div class="home-loan-summary-prepay">
+                <p class="home-loan-summary-prepay-label">Part-Prepayment Limit</p>
+                <p class="home-loan-summary-prepay-value">Up to &#8377;46,25,000</p>
+              </div>
+              <p class="home-loan-summary-question">Would you like to prepay the amount?</p>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="loan-payment-received-showcase" id="loan-payment-received-showcase" aria-hidden="true">
+        <div class="loan-payment-received-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="loan-payment-received" id="welcome-loan-payment-received" aria-label="Payment received">
+            <img class="address-aadhaar-verify-circle loan-payment-received-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+            <div class="loan-payment-received-inner">
+              <div class="loan-payment-received-top">
+                <h3 class="loan-payment-received-title">Payment Received!</h3>
+                <p class="loan-payment-received-subtitle">
+                  We have received the part-prepayment for Home Loan
+                </p>
+                <div class="loan-payment-received-hero" aria-hidden="true">
+                  <div class="loan-payment-received-hero-frame">
+                    <div class="loan-payment-received-hero-aspect">
+                      <img class="loan-payment-received-hero-img" src="/media/loan-payment-received-hero.png" alt="" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="loan-payment-received-bottom">
+                <article class="loan-payment-received-card" id="welcome-loan-payment-received-card">
+                  <header class="loan-payment-received-card-header">
+                    <p class="loan-payment-received-card-name">Home Loan</p>
+                    <p class="loan-payment-received-card-number">*****6789</p>
+                  </header>
+                  <div class="loan-payment-received-card-body">
+                    <div class="loan-payment-received-row">
+                      <p class="loan-payment-received-row-label">Paid via:</p>
+                      <p class="loan-payment-received-row-value">Savings A/c (***2728)</p>
+                    </div>
+                    <div class="loan-payment-received-row">
+                      <p class="loan-payment-received-row-label">Amount Paid</p>
+                      <p class="loan-payment-received-row-value">&#8377;20,00,000</p>
+                    </div>
+                    <div class="loan-payment-received-row">
+                      <p class="loan-payment-received-row-label">Payment Date</p>
+                      <p class="loan-payment-received-row-value">20th May 2026</p>
+                    </div>
+                  </div>
+                </article>
+                <p class="loan-payment-received-question">Would you like to Reduce EMI or Reduce Tenure?</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="loan-prepayment-adjusted-showcase" id="loan-prepayment-adjusted-showcase" aria-hidden="true">
+        <div class="loan-prepayment-adjusted-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="loan-prepayment-adjusted" id="welcome-loan-prepayment-adjusted" aria-label="Prepayment adjusted">
+            <img class="address-aadhaar-verify-circle loan-prepayment-adjusted-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+            <div class="loan-prepayment-adjusted-inner">
+              <h3 class="loan-prepayment-adjusted-title">
+                Your prepayment has been adjusted against your principal amount &amp; the EMI remains unchanged.
+              </h3>
+              <article class="loan-prepayment-adjusted-card" id="welcome-loan-prepayment-adjusted-card">
+                <div class="loan-prepayment-adjusted-metrics">
+                  <div class="loan-prepayment-adjusted-col">
+                    <p class="loan-prepayment-adjusted-label">Revised Tenure</p>
+                    <p class="loan-prepayment-adjusted-value">182 months</p>
+                  </div>
+                  <div class="loan-prepayment-adjusted-col">
+                    <p class="loan-prepayment-adjusted-label">EMI</p>
+                    <p class="loan-prepayment-adjusted-value">&#8377;1,73,468</p>
+                  </div>
+                </div>
+              </article>
+              <p class="loan-prepayment-adjusted-note">
+                Your part-payment confirmation and updated amortization schedule have also been sent to your registered email ID.
+              </p>
+            </div>
+          </section>
+        </div>
+      </section>
+      <section class="loan-blank-panel-showcase" id="loan-blank-panel-showcase" aria-hidden="true">
+        <div class="loan-blank-panel-stage">
+          <div class="pattern-layer" aria-hidden="true"></div>
+          <section class="loan-blank-panel" id="welcome-loan-blank-panel" aria-label="Request submitted">
+            <img class="address-aadhaar-verify-circle loan-blank-panel-circle" src="/media/aadhaar-verify-circle.svg" alt="" />
+            <div class="loan-blank-panel-inner">
+              <h3 class="loan-blank-panel-title">Request Submitted!</h3>
+              <p class="loan-blank-panel-text">
+                Your new communication address will be updated within 24 hrs. Your new
+                <strong>communication address</strong> will be updated within <strong>24 hrs</strong>.
+              </p>
+              <ul class="loan-blank-panel-list">
+                <li>Your new communication address</li>
+                <li>will be updated within 24 hrs.</li>
+                <li>Your new communication address</li>
+                <li>will be updated within 24 hrs.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </section>
+      <div id="chat-input-area" class="input-box">
+        <input id="entry" class="form-control" type="text" placeholder="Ask or search anything"
+          onkeydown="if (event.key === 'Enter') { event.preventDefault(); appActions.sendMessage(); }" />
+        <button id="send-button" class="btn btn-primary" type="button" onclick="appActions.sendMessage()">Send</button>
+      </div>
+    </div>
+    <div class="controls-section">
+      <div id="actions-area">
+        <button id="start-call-button" class="btn-primary btn-icon" type="button" onclick="appActions.startCall()"
+          aria-label="Start Call">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+        </button>
+        <button id="disconnect-button" class="btn-danger btn-icon" disabled type="button"
+          onclick="appActions.disconnect()" aria-label="End Call">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            <line x1="2" y1="2" x2="22" y2="22" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+  <textarea id="chat" style="display:none;"></textarea>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const role = params.get('role') || 'avatar';
+      window.__DEMO_PAGE_ROLE = role;
+    })();
+  </script>
+  <script>
+    (function () {
+      const carousel = document.getElementById('welcome-cards-carousel');
+      const wraps = Array.from(document.querySelectorAll('#welcome-cards-carousel .card-wrap'));
+      const titlePill = document.querySelector('.welcome-final-card .title-pill');
+      const positions = ['pos-left', 'pos-center', 'pos-right', 'is-hidden'];
+      const total = wraps.length;
+      let activeIndex = total > 1 ? 1 : 0;
+      let pointerId = null;
+      let dragStartX = 0;
+      let dragDeltaX = 0;
+      let isDragging = false;
+      let moved = false;
+      let dragOffset = 0;
+
+      function getLoopedIndex(index) {
+        if (total === 0) return 0;
+        return (index + total) % total;
+      }
+
+      function getCardTitle(index) {
+        const wrap = wraps[index];
+        if (!wrap) return '';
+        return (
+          wrap.getAttribute('data-title') ||
+          wrap.querySelector('img')?.getAttribute('alt') ||
+          ''
+        );
+      }
+
+      function renderWelcomeCards() {
+        if (!total) return;
+        const leftIndex = getLoopedIndex(activeIndex - 1);
+        const rightIndex = getLoopedIndex(activeIndex + 1);
+        wraps.forEach((w, i) => {
+          w.classList.remove(...positions);
+          if (i === leftIndex) w.classList.add('pos-left');
+          else if (i === activeIndex) w.classList.add('pos-center');
+          else if (i === rightIndex) w.classList.add('pos-right');
+          else w.classList.add('is-hidden');
+          w.style.transform = 'translate(-50%, -50%)';
+        });
+        if (titlePill) titlePill.textContent = getCardTitle(activeIndex);
+      }
+
+      function applyDragOffset(offsetX) {
+        const leftIndex = getLoopedIndex(activeIndex - 1);
+        const rightIndex = getLoopedIndex(activeIndex + 1);
+        [leftIndex, activeIndex, rightIndex].forEach((idx) => {
+          const wrap = wraps[idx];
+          if (!wrap) return;
+          wrap.style.transform = `translate(calc(-50% + ${offsetX}px), -50%)`;
+        });
+      }
+
+      function nextCard() {
+        activeIndex = getLoopedIndex(activeIndex + 1);
+        renderWelcomeCards();
+      }
+
+      function prevCard() {
+        activeIndex = getLoopedIndex(activeIndex - 1);
+        renderWelcomeCards();
+      }
+
+      function centerCardByIndex(index) {
+        if (index === activeIndex) return;
+        if (index === getLoopedIndex(activeIndex - 1)) prevCard();
+        else if (index === getLoopedIndex(activeIndex + 1)) nextCard();
+        else {
+          activeIndex = index;
+          renderWelcomeCards();
+        }
+      }
+
+      function onPointerDown(e) {
+        if (!carousel) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        e.preventDefault();
+        pointerId = e.pointerId;
+        carousel.setPointerCapture(pointerId);
+        isDragging = true;
+        carousel.classList.add('is-dragging');
+        moved = false;
+        dragStartX = e.clientX;
+        dragDeltaX = 0;
+        dragOffset = 0;
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging || (pointerId !== null && e.pointerId !== pointerId)) return;
+        e.preventDefault();
+        dragDeltaX = e.clientX - dragStartX;
+        dragOffset = dragDeltaX * 0.6;
+        if (Math.abs(dragDeltaX) > 6) moved = true;
+        applyDragOffset(dragOffset);
+      }
+
+      function onPointerUp() {
+        if (!isDragging) return;
+        isDragging = false;
+        carousel?.classList.remove('is-dragging');
+        if (carousel && pointerId !== null) {
+          try { carousel.releasePointerCapture(pointerId); } catch { }
+        }
+        pointerId = null;
+        const threshold = 22;
+        if (dragDeltaX <= -threshold) nextCard();
+        else if (dragDeltaX >= threshold) prevCard();
+        else renderWelcomeCards();
+        dragDeltaX = 0;
+        dragOffset = 0;
+      }
+
+      carousel?.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+
+      wraps.forEach((wrap, index) => {
+        wrap.addEventListener('click', () => {
+          if (moved) return;
+          centerCardByIndex(index);
+        });
+      });
+
+      renderWelcomeCards();
+
+      const SIMILARITY_THRESHOLD = 85;
+      const SOFTNESS = 22;
+      const GREEN_DOMINANCE = 35;
+      const FALLBACK_GREEN = { r: 0, g: 255, b: 0 };
+
+      function detectGreenReference(ctx, width, height) {
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const data = imageData.data;
+        let sumR = 0, sumG = 0, sumB = 0, count = 0;
+        const borderTop = Math.floor(height * 0.08);
+        const borderBottom = Math.floor(height * 0.92);
+        const borderLeft = Math.floor(width * 0.08);
+        const borderRight = Math.floor(width * 0.92);
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            if ((y < borderTop || y > borderBottom || x < borderLeft || x > borderRight)) {
+              const i = (y * width + x) * 4;
+              const r = data[i], g = data[i + 1], b = data[i + 2];
+              if (g > r && g > b && (g - r) > 30 && (g - b) > 30) {
+                sumR += r; sumG += g; sumB += b; count++;
+              }
+            }
+          }
+        }
+        if (count < 80) return null;
+        return { r: sumR / count, g: sumG / count, b: sumB / count };
+      }
+
+      function applyAdaptiveChroma(ctx, width, height, ref) {
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i], g = data[i + 1], b = data[i + 2];
+          const isGreenBg = g > r && g > b && (g - Math.min(r, b)) >= GREEN_DOMINANCE;
+          if (!isGreenBg) {
+            data[i + 3] = 255;
+            continue;
+          }
+          const d = Math.sqrt(Math.pow(r - ref.r, 2) + Math.pow(g - ref.g, 2) + Math.pow(b - ref.b, 2));
+          const edgeStart = SIMILARITY_THRESHOLD - SOFTNESS;
+          const edgeEnd = SIMILARITY_THRESHOLD;
+          let alpha = 1.0;
+          if (d < edgeStart) alpha = 0;
+          else if (d < edgeEnd) alpha = (d - edgeStart) / SOFTNESS;
+          if (alpha < 0.5) data[i + 1] = Math.min(g, Math.floor((r + b) / 2));
+          data[i + 3] = Math.round(alpha * 255);
+        }
+        ctx.putImageData(imageData, 0, 0);
+      }
+
+      let evaChromaRunning = false;
+      let evaChromaRef = null;
+
+      function processEvaStatic() {
+        const img = document.getElementById('eva-static-source');
+        const outputCanvas = document.getElementById('eva-static-canvas');
+        if (!img || !outputCanvas || !img.complete || img.naturalWidth === 0) return;
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const workCanvas = document.createElement('canvas');
+        workCanvas.width = w;
+        workCanvas.height = h;
+        const wCtx = workCanvas.getContext('2d', { willReadFrequently: true });
+        const oCtx = outputCanvas.getContext('2d', { willReadFrequently: true });
+        if (!wCtx || !oCtx) return;
+        outputCanvas.width = w;
+        outputCanvas.height = h;
+        wCtx.drawImage(img, 0, 0);
+        const ref = detectGreenReference(wCtx, w, h) || FALLBACK_GREEN;
+        applyAdaptiveChroma(wCtx, w, h, ref);
+        const scale = 0.83;
+        const dw = w * scale, dh = h * scale;
+        const ox = (w - dw) / 2, oy = (h - dh) / 2;
+        oCtx.clearRect(0, 0, w, h);
+        oCtx.drawImage(workCanvas, 0, 0, w, h, ox, oy, dw, dh);
+      }
+
+      function processEvaChroma() {
+        const source = document.getElementById('eva-chroma-source');
+        const workCanvas = document.getElementById('eva-chroma-canvas');
+        const outputCanvas = document.getElementById('eva-canvas');
+        if (!source || !workCanvas || !outputCanvas || source.paused || source.ended) {
+          if (evaChromaRunning) requestAnimationFrame(processEvaChroma);
+          return;
+        }
+        const wCtx = workCanvas.getContext('2d', { willReadFrequently: true });
+        const oCtx = outputCanvas.getContext('2d', { willReadFrequently: true });
+        if (!wCtx || !oCtx) return;
+        if (workCanvas.width !== source.videoWidth || workCanvas.height !== source.videoHeight) {
+          if (source.videoWidth > 0 && source.videoHeight > 0) {
+            workCanvas.width = source.videoWidth;
+            workCanvas.height = source.videoHeight;
+            outputCanvas.width = source.videoWidth;
+            outputCanvas.height = source.videoHeight;
+            evaChromaRef = null;
+          }
+        }
+        if (workCanvas.width > 0 && workCanvas.height > 0) {
+          wCtx.drawImage(source, 0, 0);
+          if (!evaChromaRef) evaChromaRef = detectGreenReference(wCtx, workCanvas.width, workCanvas.height) || FALLBACK_GREEN;
+          applyAdaptiveChroma(wCtx, workCanvas.width, workCanvas.height, evaChromaRef);
+          const scale = 0.83;
+          const dw = workCanvas.width * scale, dh = workCanvas.height * scale;
+          const ox = (workCanvas.width - dw) / 2, oy = (workCanvas.height - dh) / 2;
+          oCtx.clearRect(0, 0, outputCanvas.width, outputCanvas.height);
+          oCtx.drawImage(workCanvas, 0, 0, workCanvas.width, workCanvas.height, ox, oy, dw, dh);
+        }
+        if (evaChromaRunning) requestAnimationFrame(processEvaChroma);
+      }
+
+      window.startEvaChromaProcess = function () {
+        evaChromaRunning = true;
+        evaChromaRef = null;
+        document.querySelector('.eva-agent-layer')?.classList.add('live');
+        document.querySelector('.eva-static-layer')?.classList.add('agent-active');
+        processEvaChroma();
+      };
+
+      window.stopEvaChromaProcess = function () {
+        evaChromaRunning = false;
+        document.querySelector('.eva-agent-layer')?.classList.remove('live');
+        document.querySelector('.eva-static-layer')?.classList.remove('agent-active');
+        processEvaStatic();
+      };
+
+      const staticImg = document.getElementById('eva-static-source');
+      if (staticImg) {
+        if (staticImg.complete) processEvaStatic();
+        else staticImg.onload = processEvaStatic;
+      }
+    })();
+  </script>
+  <script type="module" src="/face-scan-camera.js"></script>
+  <script src="./demo.ts" type="module"></script>
+</body>
+
+</html>
