@@ -8,7 +8,7 @@
     "dev": "concurrently -k \"vite\" \"node server/index.js\"",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "demo:two-screen": "node scripts/launch-two-screen-demo.js"
+    "demo:two-screen": "node scripts/launch_two_screens.js"
   },
   "dependencies": {
     "@livekit/agents": "^1.0.0",

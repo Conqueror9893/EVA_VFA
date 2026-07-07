@@ -70,7 +70,7 @@ window.addEventListener("demoModeChanged", () => {
 });
 
 const CHATCHANNELNAME = `${DEFAULT_CHAT_CHANNEL_NAME}${sessionKey}`;
-const JOURNEYTABPATH = `journey-screen.html?session=${encodeURIComponent(
+const JOURNEYTABPATH = `journey_screen.html?session=${encodeURIComponent(
   sessionKey,
 )}&role=journey${demoMode ? "&twoTab=1" : ""}`;
 
@@ -1072,7 +1072,7 @@ async function connectToLiveKit(url: string, token: string): Promise<void> {
   if (!isAvatarPage()) {
     return;
   }
-  const room = new Room(roomOptions);
+  const room = new Room(roomOptions); 
   // Capture topic-based text streams (`lk.chat`) directly so transcript
   // updates even when RoomEvent.ChatMessage is not emitted for this topic.
   room.registerTextStreamHandler(
@@ -2497,6 +2497,7 @@ function isChatPage() {
     p.endsWith("/index.html") ||
     p.endsWith("/interaction-screen.html") ||
     p.endsWith("/journey-screen.html") ||
+    p.endsWith("/journey_screen.html") ||
     p.endsWith("/chat") ||
     p.endsWith("/chat.html")
   );
