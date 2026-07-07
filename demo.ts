@@ -177,6 +177,7 @@ function isJourneyPage() {
 
 // @ts-ignore
 function canRenderJourneyUi() {
+  if (!demoMode && isAvatarPage()) return true;
   return isJourneyPage();
 }
 
@@ -212,7 +213,7 @@ function updateJourneyPlaceholder(
   journey: string | null,
   reason?: string | null,
 ) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
 
   lastMirroredJourneyScreen = screen;
   lastMirroredJourneyName = journey;
@@ -786,12 +787,8 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
     `[ConvAI] ui_show_screen → ${screen}${reason ? ` (${reason})` : ""}`,
   );
   try {
-    if (!isJourneyPage()) {
-      return;
-    }
-    if (isJourneyPage()) {
+    if (canRenderJourneyUi()) {
       const fn = JOURNEY_DISPATCH[screen];
-
       fn?.();
     }
   } catch (err: any) {
@@ -799,6 +796,7 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
       `[ConvAI] ui_show_screen "${screen}" handler failed: ${err?.message ?? err}`,
     );
   }
+
   postCrossPageMessage({
     type: "journey-stage",
     screen,
@@ -825,7 +823,7 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
 
 const appActions = {
   startCall: async () => {
-    if (isInteractionPage() || isJourneyPage()) {
+    if (isInteractionPage() || canRenderJourneyUi()) {
       postCrossPageMessage({ type: "start-call-request" });
       showStatus?.("info", "Requesting the avatar window to connect...");
       return;
@@ -2252,7 +2250,7 @@ function renderParticipant(participant: Participant, remove: boolean = false) {
 
   const { identity } = participant;
   const useChromaEva =
-    !isJourneyPage() && (isChatPage() || isWelcomePage()) && isAgent;
+    !canRenderJourneyUi() && (isChatPage() || isWelcomePage()) && isAgent;
 
   if (remove) {
     if (useChromaEva) {
@@ -2945,7 +2943,7 @@ function deactivateLiveSearchPanel() {
 }
 
 function showWelcomeLoanBlankPanelStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   // Req: when hdfc live-chat is active, ONLY the panel should be visible — reset
   // every scripted journey's state so nothing lingers behind the panel.
   resetOtherJourneysExcept(null);
@@ -3399,7 +3397,7 @@ function resetWelcomeDetailOptionCards() {
 }
 
 function resetWelcomeStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   document.body.classList.remove(
     "eva-started",
     "eva-help-visible",
@@ -3624,7 +3622,7 @@ function isBankProductQuestion(normalized: string): boolean {
 }
 
 function showWelcomeForexStage() {
-  if (!isJourneyPage()) {
+  if (!canRenderJourneyUi()) {
     return;
   }
   resetOtherJourneysExcept("forex");
@@ -3659,7 +3657,7 @@ function showWelcomeForexStage() {
 }
 
 function showWelcomeAddressVerifyStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   document.body.classList.add(
     "eva-started",
     "eva-help-visible",
@@ -3693,7 +3691,7 @@ function showWelcomeAddressVerifyStage() {
 }
 
 function showWelcomeSelfVerifyMethodsStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (
     hasShownSelfVerifyMethodsScreen &&
     document.body.classList.contains("self-verify-stage")
@@ -3737,7 +3735,7 @@ function showWelcomeSelfVerifyMethodsStage() {
 }
 
 function setWelcomeSelfVerifyFaceAuthActive() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   const grid = document.getElementById("welcome-self-verify-methods-grid");
   if (!grid) return;
   grid.querySelectorAll<HTMLElement>(".verify-method-card").forEach((card) => {
@@ -3748,7 +3746,7 @@ function setWelcomeSelfVerifyFaceAuthActive() {
 }
 
 function startWelcomeFaceScanCamera() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   const viewportId = "#welcome-face-scan-viewport";
   window.initFaceScanCameras?.();
   requestAnimationFrame(() => {
@@ -3759,12 +3757,12 @@ function startWelcomeFaceScanCamera() {
 }
 
 function stopWelcomeFaceScanCamera() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   window.stopFaceScanViewport?.("#welcome-face-scan-viewport");
 }
 
 function showWelcomeFaceScanStage(options?: { force?: boolean }) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (document.body.classList.contains("face-scan-stage")) return;
   if (!options?.force && !isReadyForFaceScanScreen()) {
     appendLog("[Welcome] Step 8 blocked — self-verify stage not ready yet");
@@ -3814,7 +3812,7 @@ function showWelcomeFaceScanStage(options?: { force?: boolean }) {
 }
 
 function activateWelcomeFaceAuthChoice() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (!hasShownSelfVerifyMethodsScreen) {
     hasShownSelfVerifyMethodsScreen = true;
     document.body.classList.add(
@@ -3829,7 +3827,7 @@ function activateWelcomeFaceAuthChoice() {
 }
 
 function clearWelcomeFaceScanStep9Timer() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (faceScanStep9Timer) {
     clearTimeout(faceScanStep9Timer);
     faceScanStep9Timer = null;
@@ -3837,14 +3835,14 @@ function clearWelcomeFaceScanStep9Timer() {
 }
 
 function syncWelcomeAddressRequestSubmittedCopy() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   const addrEl = document.getElementById("welcome-address-request-new-address");
   if (!addrEl) return;
   addrEl.textContent = WELCOME_ADDRESS_REVIEW_DISPLAY;
 }
 
 function showWelcomeAddressRequestSubmittedStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (
     hasShownAddressRequestSubmittedScreen &&
     document.body.classList.contains("address-request-submitted-stage")
@@ -3892,7 +3890,7 @@ function showWelcomeAddressRequestSubmittedStage() {
 }
 
 function scheduleWelcomeAddressRequestSubmittedAfterFaceCapture() {
-  if (!isJourneyPage() || hasShownAddressRequestSubmittedScreen) return;
+  if (!canRenderJourneyUi() || hasShownAddressRequestSubmittedScreen) return;
   clearWelcomeFaceScanStep9Timer();
   appendLog(
     `[Welcome] Face captured — step 9 in ${WELCOME_FACE_SCAN_TO_STEP9_MS}ms`,
@@ -3940,7 +3938,7 @@ function bindWelcomeFaceScanCaptureHandlers() {
 }
 
 function initWelcomeFaceScanCaptureListener() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   bindWelcomeFaceScanCaptureHandlers();
 }
 
@@ -3970,7 +3968,7 @@ function initWelcomeAddressRequestCopyButtons() {
 }
 
 function startAddressChangeJourney(options?: { force?: boolean }) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (!options?.force && isForexJourneyInProgress()) return;
   if (
     hasShownAddressVerifyScreen &&
@@ -4269,7 +4267,7 @@ function activateCashWithdrawStage(stageClass: string) {
 }
 
 function showWelcomeCashWithdrawStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateCashWithdrawStage("cash-withdraw-stage");
   cashWithdrawJourneyActive = true;
   hasShownCashWithdrawScreen = true;
@@ -4278,7 +4276,7 @@ function showWelcomeCashWithdrawStage() {
 }
 
 function showWelcomeCashWithdrawConsentStage(amount?: number) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (typeof amount === "number" && Number.isFinite(amount) && amount > 0) {
     setCashWithdrawConsentAmount(amount);
   } else if (cashWithdrawAmount !== null) {
@@ -4293,7 +4291,7 @@ function showWelcomeCashWithdrawConsentStage(amount?: number) {
 }
 
 function showWelcomeCashWithdrawDebitSlotStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateCashWithdrawStage("cash-withdraw-debit-slot-stage");
   cashWithdrawJourneyActive = true;
   hasShownCashWithdrawDebitSlotScreen = true;
@@ -4305,7 +4303,7 @@ function showWelcomeCashWithdrawDebitSlotStage() {
 function showWelcomeCashWithdrawBankDetailsStage(options?: {
   collectCash?: boolean;
 }) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   const collectCash = Boolean(options?.collectCash);
   applyCashWithdrawBankDetailsVariant(collectCash);
   activateCashWithdrawStage("cash-withdraw-bank-details-stage");
@@ -4321,7 +4319,7 @@ function showWelcomeCashWithdrawBankDetailsStage(options?: {
 }
 
 function showWelcomeOtpVerifyStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateCashWithdrawStage("otp-verify-stage");
   cashWithdrawJourneyActive = true;
   hasShownOtpVerifyScreen = true;
@@ -4330,7 +4328,7 @@ function showWelcomeOtpVerifyStage() {
 }
 
 function startCashWithdrawJourney(options?: { force?: boolean }) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (
     !options?.force &&
     cashWithdrawJourneyActive &&
@@ -4353,7 +4351,7 @@ function startCashWithdrawJourney(options?: { force?: boolean }) {
  * causing the new journey to render on top of stale UI.
  */
 function resetOtherJourneysExcept(target: JourneyId | null) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
 
   // Switching into a real scripted journey also closes the live-chat panel.
   // (target === null means "reset every journey" and is used by the live-chat
@@ -4506,7 +4504,7 @@ function tryApplyWelcomeCashWithdrawStepFromUserSpeech(
 }
 
 function tryArmCashWithdrawInsertCardCueFromEva(text: string) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (cashWithdrawInsertCardCueArmed) return;
   if (hasShownCashWithdrawBankDetailsScreen) return;
   if (!document.body.classList.contains("cash-withdraw-debit-slot-stage"))
@@ -4889,7 +4887,7 @@ function applySendMoneySuccessContent() {
 }
 
 function showWelcomeSendMoneyPayeeStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   resetOtherJourneysExcept("send-money");
   activateSendMoneyStage("send-money-payee-stage");
   sendMoneyJourneyActive = true;
@@ -4898,7 +4896,7 @@ function showWelcomeSendMoneyPayeeStage() {
 }
 
 function showWelcomeSendMoneyPayeeSuggestStage(payeeName?: string) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (payeeName && payeeName.trim()) {
     sendMoneyPayeeName = payeeName.trim();
   }
@@ -4914,7 +4912,7 @@ function showWelcomeSendMoneyPayeeSuggestStage(payeeName?: string) {
 }
 
 function showWelcomeSendMoneyPayeeListStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   setSendMoneyPayeeListPlaceholderNames();
   activateSendMoneyStage("send-money-payee-list-stage");
   sendMoneyJourneyActive = true;
@@ -4923,7 +4921,7 @@ function showWelcomeSendMoneyPayeeListStage() {
 }
 
 function showWelcomeSendMoneyAmountStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateSendMoneyStage("send-money-amount-stage");
   sendMoneyJourneyActive = true;
   hasShownSendMoneyAmountScreen = true;
@@ -4931,7 +4929,7 @@ function showWelcomeSendMoneyAmountStage() {
 }
 
 function showWelcomeSendMoneyAccountSelectedStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   resetSendMoneyAccountActiveCards();
   sendMoneyAccountType = null;
   activateSendMoneyStage("send-money-account-selected-stage");
@@ -4943,7 +4941,7 @@ function showWelcomeSendMoneyAccountSelectedStage() {
 }
 
 function showWelcomeSendMoneyWhenStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   resetSendMoneyWhenActiveCards();
   sendMoneyWhen = null;
   activateSendMoneyStage("send-money-when-stage");
@@ -4953,7 +4951,7 @@ function showWelcomeSendMoneyWhenStage() {
 }
 
 function showWelcomeSendMoneyPreviewStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   applySendMoneyPreviewContent();
   applySendMoneySuccessContent();
   activateSendMoneyStage("send-money-preview-stage");
@@ -4965,7 +4963,7 @@ function showWelcomeSendMoneyPreviewStage() {
 }
 
 function showWelcomeSendMoneyOtpVerifyStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateSendMoneyStage("otp-verify-stage");
   sendMoneyJourneyActive = true;
   hasShownSendMoneyOtpVerifyScreen = true;
@@ -4973,7 +4971,7 @@ function showWelcomeSendMoneyOtpVerifyStage() {
 }
 
 function showWelcomeSendMoneySuccessStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   applySendMoneySuccessContent();
   activateSendMoneyStage("send-money-success-stage");
   sendMoneyJourneyActive = true;
@@ -4982,7 +4980,7 @@ function showWelcomeSendMoneySuccessStage() {
 }
 
 function startSendMoneyJourney(options?: { force?: boolean }) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (!options?.force && sendMoneyJourneyActive && hasShownSendMoneyPayeeScreen)
     return;
   resetOtherJourneysExcept("send-money");
@@ -5709,7 +5707,7 @@ function applyWelcomeHomeLoanPaymentReceivedContent() {
 }
 
 function showWelcomeHomeLoanActiveListStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   resetOtherJourneysExcept("home-loan");
   activateHomeLoanStage("loan-active-list-stage");
   homeLoanJourneyActive = true;
@@ -5719,7 +5717,7 @@ function showWelcomeHomeLoanActiveListStage() {
 }
 
 function showWelcomeHomeLoanSummaryStage(selection: "home" | "topup") {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   homeLoanSelection = selection;
   setWelcomeHomeLoanActiveListSelection(selection);
   applyWelcomeHomeLoanSummaryContent(selection);
@@ -5732,7 +5730,7 @@ function showWelcomeHomeLoanSummaryStage(selection: "home" | "topup") {
 }
 
 function showWelcomeHomeLoanOtpVerifyStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateHomeLoanStage("otp-verify-stage");
   homeLoanJourneyActive = true;
   hasShownHomeLoanOtpScreen = true;
@@ -5740,7 +5738,7 @@ function showWelcomeHomeLoanOtpVerifyStage() {
 }
 
 function showWelcomeHomeLoanPaymentReceivedStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   applyWelcomeHomeLoanPaymentReceivedContent();
   activateHomeLoanStage("loan-payment-received-stage");
   homeLoanJourneyActive = true;
@@ -5749,7 +5747,7 @@ function showWelcomeHomeLoanPaymentReceivedStage() {
 }
 
 function showWelcomeHomeLoanPrepaymentAdjustedStage() {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   activateHomeLoanStage("loan-prepayment-adjusted-stage");
   homeLoanJourneyActive = true;
   hasShownHomeLoanPrepaymentAdjustedScreen = true;
@@ -5758,7 +5756,7 @@ function showWelcomeHomeLoanPrepaymentAdjustedStage() {
 }
 
 function startHomeLoanJourney(options?: { force?: boolean }) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   if (
     !options?.force &&
     homeLoanJourneyActive &&
@@ -7762,7 +7760,7 @@ function userMessageHintsPurposeOfVisit(
 }
 
 function applyWelcomeDetailsOptionsFromUserMessage(message: string) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   const detailsVisible =
     document.body.classList.contains("details-stage") ||
     document
@@ -7846,7 +7844,7 @@ function isAddressChangeIntentMessage(message: string): boolean {
 }
 
 function updateWelcomeFlowFromUser(message: string) {
-  if (!isJourneyPage()) return;
+  if (!canRenderJourneyUi()) return;
   const normalized = normalizeMessage(message);
   if (!normalized) return;
 
@@ -8326,7 +8324,7 @@ function setChatBackgroundImage(token: string) {
 }
 
 function setChatInputBoxVisible(visible: boolean) {
-  if (!isChatPage() && !isWelcomePage()) return;
+  if (!isChatPage() && !isWelcomePage() && !isJourneyPage()) return;
   const inputBox = document.getElementById(
     "chat-input-area",
   ) as HTMLElement | null;
@@ -8631,7 +8629,7 @@ function onCrossPageMessage(message: CrossPageMessage) {
     return;
   }
   if (message.type === "call-connected") {
-    if (isJourneyPage()) {
+    if (canRenderJourneyUi()) {
       setChatControlsEnabled(true);
     }
   }
@@ -8644,13 +8642,13 @@ function onCrossPageMessage(message: CrossPageMessage) {
     return;
   }
   if (message.type === "call-disconnected") {
-    if (isJourneyPage()) {
+    if (canRenderJourneyUi()) {
       setChatControlsEnabled(false);
       updateJourneyPlaceholder(null, null, null);
     }
   }
   if (message.type === "journey-stage") {
-    if (!isJourneyPage()) return;
+    if (!canRenderJourneyUi()) return;
 
     updateJourneyPlaceholder(
       message.screen || null,
@@ -8683,7 +8681,7 @@ function onCrossPageMessage(message: CrossPageMessage) {
   if (message.type === "chat-history-response" && isChatPage()) {
     state.chatMessages = message.messages;
     renderChatFromState();
-    if (!isJourneyPage()) {
+    if (!canRenderJourneyUi()) {
       updateChatBackgroundFromHistory(message.messages);
     }
     return;
@@ -8703,7 +8701,7 @@ function onCrossPageMessage(message: CrossPageMessage) {
   }
 
   if (message.type === "chat-inbound" && isChatPage()) {
-    if (!isJourneyPage()) {
+    if (!canRenderJourneyUi()) {
       if (isLikelyUserSpeaker(message.from)) {
         updateChatBackgroundForUserMessage(message.message);
       } else {
@@ -8750,7 +8748,7 @@ function initializePageBehavior() {
     return;
   }
 
-  if (isJourneyPage()) {
+  if (canRenderJourneyUi()) {
     uiStep = "idle";
     awaitingBestCardConfirmation = false;
     pendingDetailQuestionIndex = null;
