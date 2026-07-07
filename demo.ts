@@ -32,8 +32,7 @@ const queryParams = new URLSearchParams(window.location.search);
 const pageRole =
   (window as any).DEMOPAGEROLE ?? queryParams.get("role") ?? "avatar";
 
-let demoMode =
-  (window as any).DEMOTWOTAB ?? queryParams.get("twoTab") === "1";
+let demoMode = (window as any).DEMOTWOTAB ?? queryParams.get("twoTab") === "1";
 
 let sessionKey = queryParams.get("session");
 
@@ -56,7 +55,6 @@ if (!sessionKey) {
   const newUrl = `${window.location.pathname}?${queryParams.toString()}${window.location.hash}`;
   window.history.replaceState({}, "", newUrl);
 }
-
 
 window.addEventListener("demoModeChanged", () => {
   demoMode = (window as any).DEMOTWOTAB;
@@ -192,10 +190,7 @@ function ensureJourneyTabOpen() {
   if (journeyWindowRef && !journeyWindowRef.closed) return;
 
   const url = new URL(JOURNEYTABPATH, window.location.href);
-  journeyWindowRef = window.open(
-    url.toString(),
-    "journey-screen"
-  );
+  journeyWindowRef = window.open(url.toString(), "journey-screen");
 
   if (!journeyWindowRef) {
     appendLog("[TwoTab] Journey window popup was blocked.");
@@ -713,6 +708,8 @@ function markActiveJourneyComplete(reason: string) {
 }
 
 function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
+  console.log("[DEBUG] handleConvaiUiShowScreenPayload() entered", payload);
+
   const screenRaw = typeof payload.screen === "string" ? payload.screen : "";
   const screen = screenRaw.trim().toLowerCase();
   if (!screen) return;
@@ -797,6 +794,7 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
     );
   }
 
+  console.log("[DEBUG] postCrossPageMessage() executed");
   postCrossPageMessage({
     type: "journey-stage",
     screen,
@@ -823,7 +821,7 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
 
 const appActions = {
   startCall: async () => {
-    if (isInteractionPage() || canRenderJourneyUi()) {
+    if (!isAvatarPage()) {
       postCrossPageMessage({ type: "start-call-request" });
       showStatus?.("info", "Requesting the avatar window to connect...");
       return;
@@ -934,7 +932,8 @@ const appActions = {
       await currentRoom.localParticipant.setCameraEnabled(!enabled);
       appendLog(`Camera ${!enabled ? "enabled" : "disabled"}`);
       if (isAvatarPage()) {
-renderParticipant(currentRoom.localParticipant);}
+        renderParticipant(currentRoom.localParticipant);
+      }
       updateButtonsForPublishState();
     } catch (error: any) {
       appendLog(`Error toggling video: ${error.message}`);
@@ -1070,7 +1069,7 @@ async function connectToLiveKit(url: string, token: string): Promise<void> {
   if (!isAvatarPage()) {
     return;
   }
-  const room = new Room(roomOptions); 
+  const room = new Room(roomOptions);
   // Capture topic-based text streams (`lk.chat`) directly so transcript
   // updates even when RoomEvent.ChatMessage is not emitted for this topic.
   room.registerTextStreamHandler(
@@ -1193,23 +1192,27 @@ async function connectToLiveKit(url: string, token: string): Promise<void> {
       .on(RoomEvent.Reconnected, () => appendLog("Reconnected successfully"))
       .on(RoomEvent.LocalTrackPublished, () => {
         if (isAvatarPage()) {
-renderParticipant(room.localParticipant);}
+          renderParticipant(room.localParticipant);
+        }
       })
       .on(RoomEvent.LocalTrackUnpublished, () => {
         if (isAvatarPage()) {
-renderParticipant(room.localParticipant);}
+          renderParticipant(room.localParticipant);
+        }
       })
       .on(RoomEvent.TrackSubscribed, (_, __, participant) => {
         appendLog(`Subscribed to track from ${participant.identity}`);
         if (isAvatarPage()) {
-renderParticipant(participant);}
+          renderParticipant(participant);
+        }
       })
       .on(RoomEvent.TrackPublished, (publication, participant) => {
         appendLog(
           `Track published from ${participant.identity} (${String((publication as any)?.kind ?? "unknown")})`,
         );
         if (isAvatarPage()) {
-renderParticipant(participant);}
+          renderParticipant(participant);
+        }
       })
       .on(RoomEvent.TrackSubscriptionStatusChanged, (...args: any[]) => {
         const publication = args.find(
@@ -1224,12 +1227,14 @@ renderParticipant(participant);}
             `Track subscription status changed for ${participant.identity}: ${String((publication as any)?.isSubscribed ?? "unknown")}`,
           );
           if (isAvatarPage()) {
-renderParticipant(participant);}
+            renderParticipant(participant);
+          }
         }
       })
       .on(RoomEvent.TrackUnsubscribed, (_, __, participant) => {
         if (isAvatarPage()) {
-renderParticipant(participant);}
+          renderParticipant(participant);
+        }
       })
       .on(RoomEvent.AudioPlaybackStatusChanged, () => {
         if (room.canPlaybackAudio) {
@@ -1295,21 +1300,25 @@ function participantConnected(participant: Participant) {
     .on(ParticipantEvent.TrackUnmuted, (_: TrackPublication) => {
       appendLog(`Track unmuted: ${participant.identity}`);
       if (isAvatarPage()) {
-renderParticipant(participant);}
+        renderParticipant(participant);
+      }
     })
     .on(ParticipantEvent.IsSpeakingChanged, () => {
       if (isAvatarPage()) {
-renderParticipant(participant);}
+        renderParticipant(participant);
+      }
     });
 
   if (isAvatarPage()) {
-renderParticipant(participant);}
+    renderParticipant(participant);
+  }
 }
 
 function participantDisconnected(participant: RemoteParticipant) {
   appendLog(`Participant disconnected: ${participant.identity}`);
   if (isAvatarPage()) {
-renderParticipant(participant, true);}
+    renderParticipant(participant, true);
+  }
 }
 
 function handleRoomDisconnect(reason?: DisconnectReason) {
@@ -3034,7 +3043,9 @@ function renderLoanBlankPanelAnswer(answer: string, raw: unknown) {
 }
 
 function renderLoanBlankPanelSections(sections: LoanBlankPanelSections) {
-  const root = document.getElementById("welcome-loan-blank-panel");
+  const root =
+    document.getElementById("journey-loan-blank-panel") ||
+    document.getElementById("welcome-loan-blank-panel");
   if (!root) return;
 
   const titleEl = root.querySelector<HTMLElement>(".loan-blank-panel-title");
@@ -3622,6 +3633,7 @@ function isBankProductQuestion(normalized: string): boolean {
 }
 
 function showWelcomeForexStage() {
+  console.log("[DEBUG] Correct showWelcomeForexStage() entered");
   if (!canRenderJourneyUi()) {
     return;
   }
@@ -3736,7 +3748,9 @@ function showWelcomeSelfVerifyMethodsStage() {
 
 function setWelcomeSelfVerifyFaceAuthActive() {
   if (!canRenderJourneyUi()) return;
-  const grid = document.getElementById("welcome-self-verify-methods-grid");
+  const grid =
+    document.getElementById("journey-self-verify-methods-grid") ||
+    document.getElementById("welcome-self-verify-methods-grid");
   if (!grid) return;
   grid.querySelectorAll<HTMLElement>(".verify-method-card").forEach((card) => {
     const active = card.dataset.method === "face-auth";
@@ -3836,7 +3850,9 @@ function clearWelcomeFaceScanStep9Timer() {
 
 function syncWelcomeAddressRequestSubmittedCopy() {
   if (!canRenderJourneyUi()) return;
-  const addrEl = document.getElementById("welcome-address-request-new-address");
+  const addrEl =
+    document.getElementById("journey-address-request-new-address") ||
+    document.getElementById("welcome-address-request-new-address");
   if (!addrEl) return;
   addrEl.textContent = WELCOME_ADDRESS_REVIEW_DISPLAY;
 }
@@ -3911,7 +3927,9 @@ function onWelcomeFaceScanCaptured() {
 }
 
 function bindWelcomeFaceScanCaptureHandlers() {
-  const viewport = document.getElementById("welcome-face-scan-viewport");
+  const viewport =
+    document.getElementById("journey-face-scan-viewport") ||
+    document.getElementById("welcome-face-scan-viewport");
   if (!viewport) return;
 
   if (!welcomeFaceScanCaptureListenerBound) {
@@ -4164,7 +4182,9 @@ function resetCashWithdrawFlowState() {
 
 function setCashWithdrawConsentAmount(amount: number) {
   cashWithdrawAmount = amount;
-  const el = document.getElementById("welcome-cash-withdraw-consent-amount");
+  const el =
+    document.getElementById("journey-cash-withdraw-consent-amount") ||
+    document.getElementById("welcome-cash-withdraw-consent-amount");
   if (el) el.textContent = formatCashWithdrawAmount(amount);
 }
 
@@ -4194,7 +4214,9 @@ function applyCashWithdrawBankDetailsVariant(collectCash: boolean) {
       ? CASH_WITHDRAW_COLLECT_HERO
       : CASH_WITHDRAW_BANK_DETAILS_DEFAULT_HERO;
   if (rows) rows.setAttribute("aria-hidden", collectCash ? "true" : "false");
-  const section = document.getElementById("welcome-cash-withdraw-bank-details");
+  const section =
+    document.getElementById("journey-cash-withdraw-bank-details") ||
+    document.getElementById("welcome-cash-withdraw-bank-details");
   if (section) {
     section.classList.toggle(
       "cash-withdraw-bank-details--collect",
@@ -4830,7 +4852,9 @@ function applySendMoneySuccessContent() {
   const fromMeta = `A/C: ${getSendMoneyAccountMaskText()}`;
   const { date, time } = formatSendMoneySuccessDate(new Date());
 
-  const root = document.getElementById("welcome-send-money-success");
+  const root =
+    document.getElementById("journey-send-money-success") ||
+    document.getElementById("welcome-send-money-success");
   if (!root) return;
 
   const sections = root.querySelectorAll<HTMLElement>(
@@ -5617,7 +5641,9 @@ function setWelcomeHomeLoanActiveListSelection(selection: "home" | "topup") {
 
 function applyWelcomeHomeLoanSummaryContent(selection: "home" | "topup") {
   const profile = HOME_LOAN_PROFILES[selection];
-  const root = document.getElementById("welcome-home-loan-summary");
+  const root =
+    document.getElementById("journey-home-loan-summary") ||
+    document.getElementById("welcome-home-loan-summary");
   if (!root) return;
 
   const title = root.querySelector<HTMLElement>(".home-loan-summary-title");
@@ -5670,7 +5696,9 @@ function applyWelcomeHomeLoanSummaryContent(selection: "home" | "topup") {
 function applyWelcomeHomeLoanPaymentReceivedContent() {
   const selection = homeLoanSelection ?? "home";
   const profile = HOME_LOAN_PROFILES[selection];
-  const root = document.getElementById("welcome-loan-payment-received");
+  const root =
+    document.getElementById("journey-loan-payment-received") ||
+    document.getElementById("welcome-loan-payment-received");
   if (!root) return;
 
   const subtitle = root.querySelector<HTMLElement>(
@@ -5928,7 +5956,9 @@ function tryShowHomeLoanFromEvaSpeech(message: string): boolean {
 }
 
 function initWelcomeTravelDetailsCards() {
-  const grid = document.getElementById("welcome-travel-details-needed-grid");
+  const grid =
+    document.getElementById("journey-travel-details-needed-grid") ||
+    document.getElementById("welcome-travel-details-needed-grid");
   if (!grid || grid.dataset.bound === "true") return;
   grid.dataset.bound = "true";
   const cards = Array.from(
@@ -5953,7 +5983,9 @@ function initWelcomeTravelDetailsCards() {
 }
 
 function initWelcomeHomeLoanActiveListCards() {
-  const grid = document.getElementById("welcome-loan-active-list-cards");
+  const grid =
+    document.getElementById("journey-loan-active-list-cards") ||
+    document.getElementById("welcome-loan-active-list-cards");
   if (!grid || grid.dataset.bound === "true") return;
   grid.dataset.bound = "true";
   const cards = Array.from(
@@ -5989,7 +6021,9 @@ function clearWelcomeVerifyMethodSelection() {
 }
 
 function setWelcomeVerifyMethodActive(method: string) {
-  const grid = document.getElementById("welcome-verify-methods-grid");
+  const grid =
+    document.getElementById("journey-verify-methods-grid") ||
+    document.getElementById("welcome-verify-methods-grid");
   if (!grid) {
     appendLog(`[Welcome] verify-methods grid not found (method=${method})`);
     return;
@@ -6735,7 +6769,9 @@ function applyWelcomeAddressRequestSubmittedEvaCopy() {
 function setWelcomeAddressSelectActive(
   type: "permanent" | "communication" | null,
 ) {
-  const grid = document.getElementById("welcome-address-select-cards");
+  const grid =
+    document.getElementById("journey-address-select-cards") ||
+    document.getElementById("welcome-address-select-cards");
   if (!grid) return;
   grid.querySelectorAll<HTMLElement>(".address-select-card").forEach((card) => {
     const active = type !== null && card.dataset.addressType === type;
@@ -6752,7 +6788,9 @@ const WELCOME_ADDRESS_CONFIRM_PERM_TEXT =
 const WELCOME_ADDRESS_REVIEW_DISPLAY = "101 Aecs Layout, Whitefield, Bengaluru";
 
 function applyWelcomeAddressSelectReviewView() {
-  const root = document.getElementById("welcome-address-select");
+  const root =
+    document.getElementById("journey-address-select") ||
+    document.getElementById("welcome-address-select");
   if (!root || !document.body.classList.contains("address-select-stage"))
     return;
 
@@ -6795,7 +6833,9 @@ function clearWelcomeAddressSelectConfirmState() {
     "address-select-confirm",
     "address-select-review",
   );
-  const root = document.getElementById("welcome-address-select");
+  const root =
+    document.getElementById("journey-address-select") ||
+    document.getElementById("welcome-address-select");
   if (!root) return;
   root.setAttribute("aria-label", "Select the address you want to change");
   const pickingHead = root.querySelector(".address-select-head--picking");
@@ -6853,7 +6893,9 @@ function isAddressSelectConfirmationMessage(message: string) {
 function applyWelcomeAddressSelectConfirmView() {
   if (hasConfirmedAddressSelectView) return;
   if (document.body.classList.contains("address-select-review")) return;
-  const root = document.getElementById("welcome-address-select");
+  const root =
+    document.getElementById("journey-address-select") ||
+    document.getElementById("welcome-address-select");
   if (!root) return;
   const active = root.querySelector<HTMLElement>(".address-select-card.active");
   if (!active) return;
@@ -6902,7 +6944,9 @@ function resetWelcomeAddressSelectCards() {
 }
 
 function initWelcomeAddressSelectCards() {
-  const grid = document.getElementById("welcome-address-select-cards");
+  const grid =
+    document.getElementById("journey-address-select-cards") ||
+    document.getElementById("welcome-address-select-cards");
   if (!grid || grid.dataset.bound === "true") return;
   grid.dataset.bound = "true";
   const cards = Array.from(
@@ -7473,7 +7517,9 @@ function resetWelcomeSelfVerifyMethodCards() {
 }
 
 function initWelcomeSelfVerifyMethodsCards() {
-  const grid = document.getElementById("welcome-self-verify-methods-grid");
+  const grid =
+    document.getElementById("journey-self-verify-methods-grid") ||
+    document.getElementById("welcome-self-verify-methods-grid");
   if (!grid) return;
   const methodCards = Array.from(grid.querySelectorAll(".verify-method-card"));
   const setActiveSelfVerifyCard = (card: Element) => {
@@ -7518,7 +7564,9 @@ function setWelcomeDetailsScreenVisibility(visible: boolean) {
 }
 
 function setWelcomeBestCardScreenVisibility(visible: boolean) {
-  const bestCardScreen = document.getElementById("welcome-best-card-screen");
+  const bestCardScreen =
+    document.getElementById("journey-best-card-screen") ||
+    document.getElementById("welcome-best-card-screen");
   if (bestCardScreen) {
     bestCardScreen.setAttribute("aria-hidden", visible ? "false" : "true");
   }
