@@ -15942,3 +15942,11 @@ body.welcome-page.two-tab-mode .eva-frame {
   width: min(80vw, 640px);
   height: min(80vw, 640px);
 }
+
+/* Two-tab layout styles to hide avatar and other welcome-page specific stuff on the journey screen */
+body.journey-page .preview-cont,
+body.journey-page .eva-frame,
+body.journey-page #participants-area,
+body.journey-page .controls-section {
+  display: none !important;
+}
