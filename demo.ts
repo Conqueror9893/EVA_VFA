@@ -32,7 +32,7 @@ const queryParams = new URLSearchParams(window.location.search);
 const pageRole =
   (window as any).DEMOPAGEROLE ?? queryParams.get("role") ?? "avatar";
 
-const demoMode =
+let demoMode =
   (window as any).DEMOTWOTAB ?? queryParams.get("twoTab") === "1";
 
 let sessionKey = queryParams.get("session");
@@ -56,6 +56,18 @@ if (!sessionKey) {
   const newUrl = `${window.location.pathname}?${queryParams.toString()}${window.location.hash}`;
   window.history.replaceState({}, "", newUrl);
 }
+
+
+window.addEventListener("demoModeChanged", () => {
+  demoMode = (window as any).DEMOTWOTAB;
+  if (demoMode && isAvatarPage()) {
+    ensureJourneyTabOpen();
+  } else if (!demoMode && isAvatarPage()) {
+    if (journeyWindowRef && !journeyWindowRef.closed) {
+      journeyWindowRef.close();
+    }
+  }
+});
 
 const CHATCHANNELNAME = `${DEFAULT_CHAT_CHANNEL_NAME}${sessionKey}`;
 const JOURNEYTABPATH = `journey-screen.html?session=${encodeURIComponent(
@@ -106,7 +118,9 @@ const processedInboundTexts = new Set<string>();
 type ChatView = "card-selection" | "details" | "selected-card";
 let currentChatView: ChatView | null = null;
 let journeyWindowRef: Window | null = null;
+// @ts-ignore
 let lastMirroredJourneyScreen: string | null = null;
+// @ts-ignore
 let lastMirroredJourneyName: string | null = null;
 type UiStep =
   | "idle"
@@ -161,10 +175,12 @@ function isJourneyPage() {
   return pageRole === "journey";
 }
 
+// @ts-ignore
 function canRenderJourneyUi() {
   return isJourneyPage();
 }
 
+// @ts-ignore
 function canRenderAvatarUi() {
   return isAvatarPage();
 }
@@ -177,8 +193,7 @@ function ensureJourneyTabOpen() {
   const url = new URL(JOURNEYTABPATH, window.location.href);
   journeyWindowRef = window.open(
     url.toString(),
-    "journey-screen",
-    "noopener,noreferrer",
+    "journey-screen"
   );
 
   if (!journeyWindowRef) {
@@ -547,6 +562,7 @@ function handleConvaiLanguageChangePayload(payload: Record<string, unknown>) {
  *      LLM knows when to call it.
  */
 
+// @ts-ignore
 const AVATAR_DISPATCH: Record<string, () => void> = {};
 const JOURNEY_DISPATCH: Record<string, () => void> = {
   forex: () => showWelcomeForexStage(),

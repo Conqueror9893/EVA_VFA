@@ -15913,3 +15913,32 @@ body.welcome-page.loan-prepayment-adjusted-stage .eva-frame {
   width: calc(640px * var(--scale));
   height: calc(640px * var(--scale));
 }
+/* Two-tab layout styles to hide journey screens on the main page */
+body.welcome-page.two-tab-mode .action-cont {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+body.welcome-page.two-tab-mode .preview-cont {
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  transform: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body.welcome-page.two-tab-mode .eva-frame {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(80vw, 640px);
+  height: min(80vw, 640px);
+}

@@ -142,8 +142,8 @@
             id="open-journey-button"
             class="btn-primary btn-icon"
             type="button"
-            aria-label="Open Journey Screen"
-            title="Open Journey Screen">
+            aria-label="Toggle Layout"
+            title="Toggle Layout">
             Open Journey
           </button>
         </div>
@@ -156,23 +156,37 @@
         const params = new URLSearchParams(window.location.search);
         const role = params.get("role") || "avatar";
         window.DEMOPAGEROLE = "avatar";
-       window.DEMOTWOTAB = true;
+       window.DEMOTWOTAB = false;
       })();
     </script>
     <script>
       document
         .getElementById("open-journey-button")
         ?.addEventListener("click", () => {
+          window.DEMOTWOTAB = !window.DEMOTWOTAB;
+          document.body.classList.toggle("two-tab-mode", window.DEMOTWOTAB);
+
+          const btn = document.getElementById("open-journey-button");
+          if (btn) {
+            btn.textContent = window.DEMOTWOTAB ? "Close Journey" : "Open Journey";
+          }
+
           const params = new URLSearchParams(window.location.search);
           const session = params.get("session") || crypto.randomUUID();
           params.set("session", session);
+          if (window.DEMOTWOTAB) {
+              params.set("twoTab", "1");
+          } else {
+              params.delete("twoTab");
+          }
           history.replaceState(
             {},
             "",
             `${window.location.pathname}?${params.toString()}`,
           );
-          const url = `journey-screen.html?session=${encodeURIComponent(session)}&role=journey&twoTab=1`;
-          window.open(url, "journey-screen", "noopener,noreferrer");
+
+          // Let demo.ts handle the opening/closing of the window via the event
+          window.dispatchEvent(new Event("demoModeChanged"));
         });
     </script>
     <script>
