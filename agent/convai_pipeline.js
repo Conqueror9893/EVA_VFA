@@ -493,8 +493,8 @@ export class ConvaiPipeline extends EventEmitter {
       console.warn("[convai] ui-show-screen publish failed", err?.message ?? err);
     }
   }
-
   /**
+   * 
    * ElevenLabs occasionally sends parameters as a JSON-encoded string instead of
    * an object (matches the OpenAI function-call wire format). Normalize both.
    * @param {unknown} raw
