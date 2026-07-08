@@ -1537,6 +1537,15 @@
     })();
   </script>
   <script type="module" src="/face-scan-camera.js"></script>
+  <button id="open-journey-button" style="position: fixed; top: 1rem; right: 1rem; z-index: 1000; padding: 10px 20px; font-weight: bold; background-color: #004b8f; color: white; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">Open Journey</button>
+  <script>
+    document.getElementById('open-journey-button').addEventListener('click', () => {
+      if (window.appActions && window.appActions.toggleJourney) {
+        window.appActions.toggleJourney();
+      }
+    });
+  </script>
+
   <script src="./demo.ts" type="module"></script>
 </body>
 

@@ -11,8 +11,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        avatar: resolve(__dirname, 'avatar-screen.html'),
-        interaction: resolve(__dirname, 'interaction-screen.html'),
+        welcome: resolve(__dirname, 'welcome.html'),
+        journey_screen: resolve(__dirname, 'journey_screen.html'),
       },
     },
   },

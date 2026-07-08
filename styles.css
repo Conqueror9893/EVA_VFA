@@ -442,3 +442,23 @@ body {
     min-height: 240px;
   }
 }
+body.dual-screen-active .action-cont {
+  display: none !important;
+}
+
+body.journey-page .eva-frame {
+  display: none !important;
+}
+
+body.journey-page .action-cont {
+  display: flex !important;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+}
+
+body.journey-page .chat-wrapper {
+  display: flex !important;
+  width: 100%;
+  margin-top: auto;
+}

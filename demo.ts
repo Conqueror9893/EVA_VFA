@@ -22,7 +22,13 @@ const CALL_CONNECTED_STORAGE_KEY = 'bey.callConnected';
 const DEFAULT_CHAT_CHANNEL_NAME = 'bey.chat.sync';
 const MATCHED_USER_NAME_STORAGE_KEY = 'matchedUserName';
 const MATCHED_WEBHOOK_VARIABLES_STORAGE_KEY = 'matchedWebhookVariables';
-const pageRole = (window as any).__DEMO_PAGE_ROLE || 'avatar';
+let pageRole = (window as any).__DEMO_PAGE_ROLE || 'avatar';
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('journey') === '1') {
+  pageRole = 'journey';
+  document.body.classList.add('journey-page');
+}
+function isJourneyPage() { return pageRole === 'journey'; }
 const sessionKey = new URLSearchParams(window.location.search).get('session') || 'default';
 const CHAT_CHANNEL_NAME = `${DEFAULT_CHAT_CHANNEL_NAME}:${sessionKey}`;
 
@@ -50,9 +56,17 @@ type CrossPageMessage =
   | { type: 'stop-call' }
   | { type: 'start-call-request' }
   | { type: 'chat-history-request' }
-  | { type: 'chat-history-response'; messages: ChatEntry[] };
+  | { type: 'chat-history-response'; messages: ChatEntry[] }
+  | { type: 'presentation-mode-changed'; mode: 'single' | 'dual' }
+  | { type: 'journey-stage-sync'; screen: string, reason?: string, intent?: string, force?: boolean, payload?: any }
+  | { type: 'journey-reset-sync'; target: string | null }
+  | { type: 'request-journey-state' }
+  | { type: 'send-chat-message'; message: string };
 
 let currentRoom: Room | undefined;
+let presentationMode: 'single' | 'dual' = 'single';
+let journeyWindowRef: Window | null = null;
+let lastActiveScreen: { screen: string, reason?: string, intent?: string, force?: boolean, payload?: any } | null = null;
 
 const state = {
   chatMessages: [] as ChatEntry[],
@@ -598,10 +612,15 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
   }
 
   appendLog(`[ConvAI] ui_show_screen → ${screen}${reason ? ` (${reason})` : ''}`);
-  try {
-    handler();
-  } catch (err: any) {
-    appendLog(`[ConvAI] ui_show_screen "${screen}" handler failed: ${err?.message ?? err}`);
+  lastActiveScreen = { screen, reason: reason as string | undefined, intent: intent as string | undefined, force: force as boolean | undefined, payload };
+  if (presentationMode === 'dual' && pageRole === 'welcome') {
+    postCrossPageMessage({ type: 'journey-stage-sync', screen, reason: reason as string | undefined, intent: intent as string | undefined, force: force as boolean | undefined, payload });
+  } else {
+    try {
+      handler();
+    } catch (err: any) {
+      appendLog(`[ConvAI] ui_show_screen "${screen}" handler failed: ${err?.message ?? err}`);
+    }
   }
 
   if (targetJourney && JOURNEY_TERMINAL_SCREENS[targetJourney].has(screen)) {
@@ -616,6 +635,41 @@ function handleConvaiUiShowScreenPayload(payload: Record<string, unknown>) {
 }
 
 const appActions = {
+  toggleJourney: () => {
+    if (presentationMode === 'single') {
+      presentationMode = 'dual';
+      journeyWindowRef = window.open('/journey_screen.html?session=' + sessionKey, 'JourneyWindow', 'width=1280,height=800');
+      postCrossPageMessage({ type: 'presentation-mode-changed', mode: 'dual' } as any);
+      document.body.classList.add('dual-screen-active');
+      document.getElementById('open-journey-button')?.classList.add('active');
+
+      const checkWindowInterval = setInterval(() => {
+        if (journeyWindowRef && journeyWindowRef.closed) {
+          clearInterval(checkWindowInterval);
+          if (presentationMode === 'dual') {
+            appActions.toggleJourney();
+          }
+        }
+      }, 500);
+    } else {
+      presentationMode = 'single';
+      if (journeyWindowRef && !journeyWindowRef.closed) {
+        journeyWindowRef.close();
+      }
+      journeyWindowRef = null;
+      postCrossPageMessage({ type: 'presentation-mode-changed', mode: 'single' } as any);
+      document.body.classList.remove('dual-screen-active');
+      document.getElementById('open-journey-button')?.classList.remove('active');
+
+      // Fallback
+      if (lastActiveScreen) {
+        const handler = UI_SHOW_SCREEN_DISPATCH[lastActiveScreen.screen];
+        if (handler) {
+          try { handler(); } catch(e) {}
+        }
+      }
+    }
+  },
   startCall: async () => {
     if (isInteractionPage()) {
       postCrossPageMessage({ type: 'start-call-request' });
@@ -3682,6 +3736,9 @@ function resetOtherJourneysExcept(target: JourneyId | null) {
   // panel itself, so we must NOT tear it down in that case.)
   if (target !== null) {
     deactivateLiveSearchPanel();
+  }
+  if (presentationMode === 'dual' && pageRole === 'welcome') {
+    postCrossPageMessage({ type: 'journey-reset-sync', target });
   }
 
   if (target !== 'address') {
@@ -7205,6 +7262,34 @@ function renderChatFromState() {
     chatEl.value = transcriptText;
     chatEl.scrollTop = chatEl.scrollHeight;
   }
+
+  if (isJourneyPage()) {
+      const list = document.getElementById('chat-history-list');
+      if (list) {
+        list.innerHTML = '';
+        state.chatMessages.forEach(msg => {
+          const isUser = msg.from.toLowerCase() !== 'eva' && msg.from.toLowerCase() !== 'assistant';
+          const li = document.createElement('li');
+          li.style.padding = '8px 12px';
+          li.style.borderRadius = '8px';
+          li.style.maxWidth = '80%';
+          li.style.marginBottom = '4px';
+          if (isUser) {
+            li.style.backgroundColor = '#004b8f';
+            li.style.color = 'white';
+            li.style.alignSelf = 'flex-end';
+            li.style.marginLeft = 'auto';
+          } else {
+            li.style.backgroundColor = 'rgba(255,255,255,0.1)';
+            li.style.color = 'white';
+            li.style.alignSelf = 'flex-start';
+          }
+          li.textContent = msg.message;
+          list.appendChild(li);
+        });
+        if (list.parentElement) list.parentElement.scrollTop = list.parentElement.scrollHeight;
+      }
+  }
   const dateTextEl = document.getElementById('transcription-display');
   if (dateTextEl) {
     const lastEva = [...state.chatMessages].reverse().find((m) => isLikelyEvaSpeaker(m.from));
@@ -7256,10 +7341,47 @@ function onCrossPageMessage(message: CrossPageMessage) {
     return;
   }
 
-  if (message.type === 'chat-history-response' && isChatPage()) {
+  if ((message as any).type === 'request-journey-state' && pageRole === 'welcome') {
+    if (presentationMode === 'dual' && lastActiveScreen) {
+       postCrossPageMessage({ type: 'journey-stage-sync', screen: lastActiveScreen.screen, reason: lastActiveScreen.reason, intent: lastActiveScreen.intent, force: lastActiveScreen.force, payload: lastActiveScreen.payload });
+    }
+    return;
+  }
+
+  if (message.type === 'chat-history-response' && (isChatPage() || isJourneyPage())) {
     state.chatMessages = message.messages;
     renderChatFromState();
-    updateChatBackgroundFromHistory(message.messages);
+    if (isChatPage()) {
+      updateChatBackgroundFromHistory(message.messages);
+    }
+    return;
+  }
+
+  if ((message as any).type === 'presentation-mode-changed') {
+    presentationMode = (message as any).mode;
+    if (presentationMode === 'dual') {
+      document.body.classList.add('dual-screen-active');
+    } else {
+      document.body.classList.remove('dual-screen-active');
+    }
+    return;
+  }
+
+  if ((message as any).type === 'journey-stage-sync' && pageRole === 'journey') {
+    // Clear old stage classes
+    document.body.className = 'welcome-page journey-page eva-started ' + (message as any).screen + '-stage';
+    const handler = UI_SHOW_SCREEN_DISPATCH[(message as any).screen];
+    if (handler) {
+      try { handler(); } catch(e) {}
+    }
+    return;
+  }
+
+  if ((message as any).type === 'journey-reset-sync' && pageRole === 'journey') {
+    const handler = UI_SHOW_SCREEN_DISPATCH[(message as any).target || ''];
+    if (handler) {
+      try { handler(); } catch(e) {}
+    }
     return;
   }
 
@@ -7296,6 +7418,14 @@ function initializePageBehavior() {
     onCrossPageMessage(event.data);
   });
 
+  window.addEventListener('unload', () => {
+    if (presentationMode === 'dual' && !isJourneyPage()) {
+      if (journeyWindowRef && !journeyWindowRef.closed) {
+        journeyWindowRef.close();
+      }
+    }
+  });
+
   if (isChatPage()) {
     document.addEventListener('click', tryUnlockEvaAudio);
     document.addEventListener('touchstart', tryUnlockEvaAudio);
@@ -7313,6 +7443,9 @@ function initializePageBehavior() {
     setChatInputBoxVisible(isInteractionPage());
     setChatControlsEnabled(isCallConnected() || isInteractionPage());
     postCrossPageMessage({ type: 'chat-history-request' });
+    if (pageRole === 'journey') {
+      postCrossPageMessage({ type: 'request-journey-state' } as any);
+    }
   } else if (isWelcomePage()) {
     document.addEventListener('click', tryUnlockEvaAudio);
     document.addEventListener('touchstart', tryUnlockEvaAudio);
